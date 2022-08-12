@@ -1,38 +1,38 @@
 const express = require('express');
 const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
-const clientValidation = require('../../validations/device.validation');
-const clientController = require('../../controllers/client.controller');
+const deviceValidation = require('../../validations/device.validation');
+const deviceController = require('../../controllers/device.controller');
 
 const router = express.Router();
 
 router
   .route('/')
-  .post(auth('manageClients'), validate(clientValidation.createClient), clientController.createClient)
-  .get(auth('getClients'), validate(clientValidation.getClients), clientController.getClients);
+  .post(auth('manageDevices'), validate(deviceValidation.createDevice), deviceController.createDevice)
+  .get(auth('getDevices'), validate(deviceValidation.getDevices), deviceController.getDevices);
 
 router
-  .route('/:clientId')
-  .get(auth('getClients'), validate(clientValidation.getClient), clientController.getClient)
-  .patch(auth('manageClients'), validate(clientValidation.updateClient), clientController.updateClient)
-  .delete(auth('manageClients'), validate(clientValidation.deleteClient), clientController.deleteClient);
+  .route('/:deviceId')
+  .get(auth('getDevices'), validate(deviceValidation.getDevice), deviceController.getDevice)
+  .patch(auth('manageDevices'), validate(deviceValidation.updateDevice), deviceController.updateDevice)
+  .delete(auth('manageDevices'), validate(deviceValidation.deleteDevice), deviceController.deleteDevice);
 
 module.exports = router;
 
 /**
  * @swagger
  * tags:
- *   name: Clients
- *   description: Client management and retrieval
+ *   name: Devices
+ *   description: Device management and retrieval
  */
 
 /**
  * @swagger
- * /clients:
+ * /devices:
  *   post:
- *     summary: Create a client
- *     description: Only admins can create other clients.
- *     tags: [Clients]
+ *     summary: Create a device
+ *     description: Only admins can create other devices.
+ *     tags: [Devices]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -60,19 +60,19 @@ module.exports = router;
  *                 description: At least one number and one letter
  *               role:
  *                  type: string
- *                  enum: [client, admin]
+ *                  enum: [device, admin]
  *             example:
  *               name: fake name
  *               email: fake@example.com
  *               password: password1
- *               role: client
+ *               role: device
  *     responses:
  *       "201":
  *         description: Created
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Client'
+ *                $ref: '#/components/schemas/Device'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
  *       "401":
@@ -81,9 +81,9 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *
  *   get:
- *     summary: Get all clients
- *     description: Only admins can retrieve all clients.
- *     tags: [Clients]
+ *     summary: Get all devices
+ *     description: Only admins can retrieve all devices.
+ *     tags: [Devices]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -91,12 +91,12 @@ module.exports = router;
  *         name: name
  *         schema:
  *           type: string
- *         description: Client name
+ *         description: Device name
  *       - in: query
  *         name: role
  *         schema:
  *           type: string
- *         description: Client role
+ *         description: Device role
  *       - in: query
  *         name: sortBy
  *         schema:
@@ -108,7 +108,7 @@ module.exports = router;
  *           type: integer
  *           minimum: 1
  *         default: 10
- *         description: Maximum number of clients
+ *         description: Maximum number of devices
  *       - in: query
  *         name: page
  *         schema:
@@ -127,7 +127,7 @@ module.exports = router;
  *                 results:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/Client'
+ *                     $ref: '#/components/schemas/Device'
  *                 page:
  *                   type: integer
  *                   example: 1
@@ -148,11 +148,11 @@ module.exports = router;
 
 /**
  * @swagger
- * /clients/{id}:
+ * /devices/{id}:
  *   get:
- *     summary: Get a client
- *     description: Logged in clients can fetch only their own client information. Only admins can fetch other clients.
- *     tags: [Clients]
+ *     summary: Get a device
+ *     description: Logged in devices can fetch only their own device information. Only admins can fetch other devices.
+ *     tags: [Devices]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -161,14 +161,14 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Client id
+ *         description: Device id
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Client'
+ *                $ref: '#/components/schemas/Device'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -177,9 +177,9 @@ module.exports = router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   patch:
- *     summary: Update a client
- *     description: Logged in clients can only update their own information. Only admins can update other clients.
- *     tags: [Clients]
+ *     summary: Update a device
+ *     description: Logged in devices can only update their own information. Only admins can update other devices.
+ *     tags: [Devices]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -188,7 +188,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Client id
+ *         description: Device id
  *     requestBody:
  *       required: true
  *       content:
@@ -217,7 +217,7 @@ module.exports = router;
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Client'
+ *                $ref: '#/components/schemas/Device'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
  *       "401":
@@ -228,9 +228,9 @@ module.exports = router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   delete:
- *     summary: Delete a client
- *     description: Logged in clients can delete only themselves. Only admins can delete other clients.
- *     tags: [Clients]
+ *     summary: Delete a device
+ *     description: Logged in devices can delete only themselves. Only admins can delete other devices.
+ *     tags: [Devices]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -239,7 +239,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Client id
+ *         description: Device id
  *     responses:
  *       "200":
  *         description: No content

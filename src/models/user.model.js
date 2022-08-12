@@ -57,8 +57,8 @@ const userSchema = mongoose.Schema({
   userCompId: { type: mongoose.Schema.Types.ObjectId, ref: 'Company', required: true },
   userCreatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   userCreatedAt: Date,
-  userUpdatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  userUpdatedAt: Date,
+  lastUpdatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  lastUpdatedAt: Date,
   userTimeZone: String,
   userIsActive: {
     type: Boolean,
@@ -71,8 +71,8 @@ userSchema.plugin(toJSON);
 userSchema.plugin(paginate);
 
 /**
- * Check if email is taken
- * @param {string} email - The user's email
+ * Check if username is taken
+ * @param {string} username - The user's username
  * @param {ObjectId} [excludeUserId] - The id of the user to be excluded
  * @returns {Promise<boolean>}
  */

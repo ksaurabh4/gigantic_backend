@@ -11,7 +11,7 @@ const createClient = catchAsync(async (req, res) => {
 });
 
 const getClients = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['companyIsReseller']);
+  const filter = pick(req.query, ['compIsReseller']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
   const result = await clientService.queryClients(filter, options);
   res.send(result);
@@ -26,7 +26,11 @@ const getClient = catchAsync(async (req, res) => {
 });
 
 const updateClient = catchAsync(async (req, res) => {
-  const client = await clientService.updateClientById(req.params.clientId, req.body);
+  const client = await clientService.updateClientById(req.params.clientId, {
+    ...req.body,
+    lastUpdatedBy: req.user.id,
+    lastUpdatedAt: moment(),
+  });
   res.send(client);
 });
 

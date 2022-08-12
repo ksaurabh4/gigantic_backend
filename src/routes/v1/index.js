@@ -2,6 +2,7 @@ const express = require('express');
 const authRoute = require('./auth.route');
 const userRoute = require('./user.route');
 const clientRoute = require('./client.route');
+const deviceRoute = require('./device.route');
 const docsRoute = require('./docs.route');
 const config = require('../../config/config');
 
@@ -19,6 +20,10 @@ const defaultRoutes = [
   {
     path: '/clients',
     route: clientRoute,
+  },
+  {
+    path: '/devices',
+    route: deviceRoute,
   },
 ];
 
