@@ -10,6 +10,7 @@ const allRoles = {
     'canImmobilize',
     'manageDevices',
     'getDevices',
+    'getModels',
   ],
   superadmin: [
     'getUsers',
@@ -20,6 +21,8 @@ const allRoles = {
     'canImmobilize',
     'manageDevices',
     'getDevices',
+    'manageModels',
+    'getModels',
   ],
 };
 
