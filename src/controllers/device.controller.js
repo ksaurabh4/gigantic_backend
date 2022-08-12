@@ -11,7 +11,7 @@ const createDevice = catchAsync(async (req, res) => {
 });
 
 const getDevices = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['deviceStatus']);
+  const filter = pick(req.query, ['deviceStatus', 'deviceModelId']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
   const result = await deviceService.queryDevices(filter, options);
   res.send(result);

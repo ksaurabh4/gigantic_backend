@@ -40,6 +40,8 @@ components:
         role: user
 
     Device:
+    
+    Model:
       type: object
       properties:
         id:

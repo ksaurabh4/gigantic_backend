@@ -22,6 +22,7 @@ const deviceSchema = mongoose.Schema({
     type: String,
     trim: true,
   },
+  deviceModelId: { type: mongoose.Schema.Types.ObjectId, ref: 'Model' },
   deviceClientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Client' },
   deviceStatus: {
     type: String,
