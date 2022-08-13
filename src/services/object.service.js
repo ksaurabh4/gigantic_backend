@@ -48,6 +48,9 @@ const updateObjectById = async (objectId, updateBody) => {
   if (!object) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Object not found');
   }
+  if (updateBody.objectDeviceId && (await Object.isDeviceAssigned(updateBody.objectDeviceId))) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'device assigned to other object');
+  }
   Object.assign(object, updateBody);
   await object.save();
   return object;
