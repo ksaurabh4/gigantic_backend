@@ -3,6 +3,7 @@ const authRoute = require('./auth.route');
 const userRoute = require('./user.route');
 const clientRoute = require('./client.route');
 const deviceRoute = require('./device.route');
+const objectRoute = require('./object.route');
 const modelRoute = require('./model.route');
 const docsRoute = require('./docs.route');
 const config = require('../../config/config');
@@ -25,6 +26,10 @@ const defaultRoutes = [
   {
     path: '/devices',
     route: deviceRoute,
+  },
+  {
+    path: '/objects',
+    route: objectRoute,
   },
   {
     path: '/models',

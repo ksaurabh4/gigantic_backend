@@ -41,6 +41,8 @@ components:
 
     Device:
     
+    Object:
+    
     Model:
       type: object
       properties:
