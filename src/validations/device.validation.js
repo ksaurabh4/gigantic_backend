@@ -7,6 +7,8 @@ const createDevice = {
     deviceModelName: Joi.string().required(),
     deviceType: Joi.string().required(),
     deviceManufacturer: Joi.string(),
+    deviceSimNumber: Joi.string(),
+    deviceSimProvider: Joi.string(),
     deviceModelId: Joi.string().required().custom(objectId),
     deviceClientId: Joi.string().required().custom(objectId),
     deviceStatus: Joi.string().required(),
@@ -16,10 +18,10 @@ const createDevice = {
 
 const getDevices = {
   query: Joi.object().keys({
-    deviceImei: Joi.string(),
     deviceModelName: Joi.string(),
     deviceType: Joi.string(),
     deviceManufacturer: Joi.string(),
+    deviceSimProvider: Joi.string(),
     deviceModelId: Joi.string().custom(objectId),
     deviceClientId: Joi.string().custom(objectId),
     deviceStatus: Joi.string(),
@@ -45,6 +47,8 @@ const updateDevice = {
       deviceModelName: Joi.string(),
       deviceType: Joi.string(),
       deviceManufacturer: Joi.string(),
+      deviceSimNumber: Joi.string(),
+      deviceSimProvider: Joi.string(),
       deviceModelId: Joi.string().custom(objectId),
       deviceClientId: Joi.string().custom(objectId),
       deviceStatus: Joi.string(),

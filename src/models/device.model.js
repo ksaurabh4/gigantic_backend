@@ -15,6 +15,7 @@ const deviceSchema = mongoose.Schema({
   },
   deviceType: {
     type: String,
+    required: true,
     enum: ['wired', 'wireless', 'obd'],
     default: 'wired',
   },
@@ -22,12 +23,20 @@ const deviceSchema = mongoose.Schema({
     type: String,
     trim: true,
   },
+  deviceSimNumber: {
+    type: String,
+    trim: true,
+  },
+  deviceSimProvider: {
+    type: String,
+    trim: true,
+  },
   deviceModelId: { type: mongoose.Schema.Types.ObjectId, ref: 'Model' },
   deviceClientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Client' },
   deviceStatus: {
     type: String,
-    enum: ['notactivated', 'activated', 'deactivated'],
-    default: 'notactivated',
+    enum: ['unassigned', 'assigned', 'activated', 'deactivated'],
+    default: 'unassigned',
   },
   deviceCreatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   deviceCreatedAt: Date,

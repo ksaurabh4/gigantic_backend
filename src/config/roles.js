@@ -11,6 +11,8 @@ const allRoles = {
     'manageDevices',
     'getDevices',
     'getModels',
+    'manageObjects',
+    'getObjects',
   ],
   superadmin: [
     'getUsers',
@@ -23,6 +25,8 @@ const allRoles = {
     'getDevices',
     'manageModels',
     'getModels',
+    'manageObjects',
+    'getObjects',
   ],
 };
 
