@@ -16,6 +16,7 @@ const createClient = async (clientBody) => {
   const {
     compPrimaryUser: username,
     password,
+    compTimeZone,
     compEmail,
     compPhone,
     compContactPerson: userFullName,
@@ -34,6 +35,7 @@ const createClient = async (clientBody) => {
       userPhone,
       role: compIsReseller ? 'reseller' : 'admin',
       userPasswordText: password,
+      userTimeZone: compTimeZone,
       userCompId: client._id,
       userCreatedBy,
       userCreatedAt,
@@ -55,6 +57,21 @@ const queryClients = async (filter, options) => {
   const clients = await Client.paginate(filter, options);
   return clients;
 };
+
+/**
+ * Query for clients List
+ * @param {Object} filter - Mongo filter
+ * @param {Object} options - Query options
+ * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
+ * @param {number} [options.limit] - Maximum number of results per page (default = 10)
+ * @param {number} [options.page] - Current page (default = 1)
+ * @returns {Promise<QueryResult>}
+ */
+const queryClientsList = async (filter, options) => {
+  const clients = await Client.paginate(filter, options, ['compName', 'compPrimaryUser']);
+  return clients;
+};
+
 /**
  * Get client by id
  * @param {ObjectId} id
@@ -97,6 +114,7 @@ const deleteClientById = async (clientId) => {
 module.exports = {
   createClient,
   queryClients,
+  queryClientsList,
   getClientById,
   updateClientById,
   deleteClientById,

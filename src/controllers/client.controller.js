@@ -17,6 +17,13 @@ const getClients = catchAsync(async (req, res) => {
   res.send(result);
 });
 
+const getClientsList = catchAsync(async (req, res) => {
+  const filter = pick(req.query, ['compIsReseller']);
+  const options = pick(req.query, ['sortBy', 'limit', 'page']);
+  const result = await clientService.queryClientsList(filter, options);
+  res.send(result);
+});
+
 const getClient = catchAsync(async (req, res) => {
   const client = await clientService.getClientById(req.params.clientId);
   if (!client) {
@@ -42,6 +49,7 @@ const deleteClient = catchAsync(async (req, res) => {
 module.exports = {
   createClient,
   getClients,
+  getClientsList,
   getClient,
   updateClient,
   deleteClient,
