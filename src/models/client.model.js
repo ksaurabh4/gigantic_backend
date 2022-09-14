@@ -16,7 +16,7 @@ const clientSchema = mongoose.Schema({
     type: String,
     trim: true,
   },
-  salesPerson: { type: String, default: '' },
+  compSalesPerson: { type: String },
   compSupportNumber: { type: String },
   compSupportEmail: { type: String },
   compPrimaryUser: { type: String, unique: true, required: true },
@@ -31,7 +31,6 @@ const clientSchema = mongoose.Schema({
   },
   compPhone: {
     type: String,
-    required: true,
     trim: true,
   },
   compCreatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
@@ -53,14 +52,22 @@ const clientSchema = mongoose.Schema({
     id: { type: String, default: '' },
     pswd: { type: String, default: '' },
   },
-  compDomain: { type: String, default: '' },
-  compIp: { type: String, default: '' },
+  compPreferredLang: { type: String, default: 'english' },
+  compPreferredCoordinates: {
+    type: { type: String },
+    coordinates: [],
+  },
+  compDomain: { type: String },
+  compIp: { type: String },
   compIsWhiteLabelled: Boolean,
 });
 
 // add plugin that converts mongoose to json
 clientSchema.plugin(toJSON);
 clientSchema.plugin(paginate);
+
+// tie an index to the schema
+clientSchema.index({ compPreferredCoordinates: '2dsphere' });
 
 /**
  * @typedef Client
