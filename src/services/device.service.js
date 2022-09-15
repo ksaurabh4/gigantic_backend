@@ -27,6 +27,20 @@ const queryDevices = async (filter, options) => {
   const devices = await Device.paginate(filter, options);
   return devices;
 };
+
+/**
+ * Query for devices list
+ * @param {Object} filter - Mongo filter
+ * @param {Object} options - Query options
+ * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
+ * @param {number} [options.limit] - Maximum number of results per page (default = 10)
+ * @param {number} [options.page] - Current page (default = 1)
+ * @returns {Promise<QueryResult>}
+ */
+const queryDevicesList = async (filter, options) => {
+  const devices = await Device.paginate(filter, options, ['deviceImei']);
+  return devices;
+};
 /**
  * Get device by id
  * @param {ObjectId} id
@@ -69,6 +83,7 @@ const deleteDeviceById = async (deviceId) => {
 module.exports = {
   createDevice,
   queryDevices,
+  queryDevicesList,
   getDeviceById,
   updateDeviceById,
   deleteDeviceById,

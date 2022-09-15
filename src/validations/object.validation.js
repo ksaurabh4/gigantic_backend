@@ -8,7 +8,6 @@ const createDevice = {
     objectClientId: Joi.string().required().custom(objectId),
     objectDeviceId: Joi.string().required().custom(objectId),
     objectIsInParkingMode: Joi.boolean(),
-    objectSensors: Joi.array().required(),
     objectStatus: Joi.string().required(),
     objectIcon: Joi.string(),
   }),
@@ -45,7 +44,6 @@ const updateDevice = {
       objectClientId: Joi.string().custom(objectId),
       objectDeviceId: Joi.string().custom(objectId),
       objectIsInParkingMode: Joi.boolean(),
-      objectSensors: Joi.array(),
       objectStatus: Joi.string(),
       objectIcon: Joi.string(),
     })

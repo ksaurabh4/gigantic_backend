@@ -25,6 +25,19 @@ const queryModels = async (filter, options) => {
   return models;
 };
 /**
+ * Query for models list
+ * @param {Object} filter - Mongo filter
+ * @param {Object} options - Query options
+ * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
+ * @param {number} [options.limit] - Maximum number of results per page (default = 10)
+ * @param {number} [options.page] - Current page (default = 1)
+ * @returns {Promise<QueryResult>}
+ */
+const queryModelsList = async (filter, options) => {
+  const models = await Model.paginate(filter, options, ['modelName', 'modelPort']);
+  return models;
+};
+/**
  * Get model by id
  * @param {ObjectId} id
  * @returns {Promise<Model>}
@@ -66,6 +79,7 @@ const deleteModelById = async (modelId) => {
 module.exports = {
   createModel,
   queryModels,
+  queryModelsList,
   getModelById,
   updateModelById,
   deleteModelById,

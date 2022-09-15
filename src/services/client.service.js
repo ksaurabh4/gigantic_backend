@@ -68,7 +68,7 @@ const queryClients = async (filter, options) => {
  * @returns {Promise<QueryResult>}
  */
 const queryClientsList = async (filter, options) => {
-  const clients = await Client.paginate(filter, options, ['compName', 'compPrimaryUser']);
+  const clients = await Client.paginate(filter, options, ['compName', 'compPrimaryUser', 'compHirerchy']);
   return clients;
 };
 

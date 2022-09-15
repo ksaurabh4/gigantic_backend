@@ -38,6 +38,7 @@ const clientSchema = mongoose.Schema({
   lastUpdatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   lastUpdatedAt: Date,
   compParentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Client' },
+  compHirerchy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Client' }],
   compIsReseller: {
     type: Boolean,
     default: false,

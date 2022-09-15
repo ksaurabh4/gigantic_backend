@@ -12,7 +12,7 @@ const createClient = catchAsync(async (req, res) => {
 
 const getClients = catchAsync(async (req, res) => {
   const filter = pick(req.query, ['compIsReseller']);
-  filter.compParentId = req.user.userCompId;
+  filter.compHirerchy = { $in: [req.user.userCompId] };
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
   const result = await clientService.queryClients(filter, options);
   res.send(result);
@@ -20,7 +20,7 @@ const getClients = catchAsync(async (req, res) => {
 
 const getClientsList = catchAsync(async (req, res) => {
   const filter = pick(req.query, ['compIsReseller']);
-  filter.compParentId = req.user.userCompId;
+  filter.compHirerchy = { $in: [req.user.userCompId] };
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
   const result = await clientService.queryClientsList(filter, options);
   res.send(result);

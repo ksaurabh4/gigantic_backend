@@ -33,6 +33,14 @@ const deviceSchema = mongoose.Schema({
   },
   deviceModelId: { type: mongoose.Schema.Types.ObjectId, ref: 'Model' },
   deviceClientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Client' },
+  deviceSensors: [
+    {
+      parameterName: String,
+      sensorId: { type: mongoose.Schema.Types.ObjectId, ref: 'sensors' },
+      readingType: String,
+      fuelCalibData: { type: mongoose.Schema.Types.ObjectId, ref: 'fuel' },
+    },
+  ],
   deviceStatus: {
     type: String,
     enum: ['unassigned', 'assigned', 'activated', 'deactivated'],
