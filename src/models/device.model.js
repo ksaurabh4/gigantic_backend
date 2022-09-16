@@ -25,6 +25,7 @@ const deviceSchema = mongoose.Schema({
   },
   deviceSimNumber: {
     type: String,
+    unique: true,
     trim: true,
   },
   deviceSimProvider: {

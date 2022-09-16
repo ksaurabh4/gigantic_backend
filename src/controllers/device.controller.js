@@ -11,6 +11,7 @@ const createDevice = catchAsync(async (req, res) => {
 });
 
 const getDevices = catchAsync(async (req, res) => {
+  console.log(req.user);
   const filter = pick(req.query, ['deviceStatus', 'deviceModelId']);
   filter.deviceClientId = req.user.userCompId;
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
