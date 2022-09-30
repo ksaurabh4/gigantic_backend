@@ -1,7 +1,7 @@
 {
   "apps": [
     {
-      "name": "app",
+      "name": "gigantic-backend",
       "script": "src/index.js",
       "instances": 1,
       "autorestart": true,

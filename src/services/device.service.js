@@ -1,4 +1,5 @@
 const httpStatus = require('http-status');
+const axios = require('axios').default;
 const { Device } = require('../models');
 const ApiError = require('../utils/ApiError');
 
@@ -11,7 +12,9 @@ const createDevice = async (deviceBody) => {
   if (await Device.isDeviceAdded(deviceBody.deviceImei)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'device already added');
   }
-  return Device.create(deviceBody);
+  const devices = Device.create(deviceBody);
+  axios.post('http://localhost:3001/api/refresh');
+  return devices;
 };
 
 /**
@@ -63,6 +66,7 @@ const updateDeviceById = async (deviceId, updateBody) => {
   }
   Object.assign(device, updateBody);
   await device.save();
+  axios.post('http://localhost:3001/api/refresh');
   return device;
 };
 
@@ -77,6 +81,7 @@ const deleteDeviceById = async (deviceId) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Device not found');
   }
   await device.remove();
+  axios.post('http://localhost:3001/api/refresh');
   return device;
 };
 
