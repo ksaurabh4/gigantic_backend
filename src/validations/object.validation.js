@@ -1,25 +1,25 @@
 const Joi = require('joi');
 const { objectId } = require('./custom.validation');
 
-const createDevice = {
+const createObject = {
   body: Joi.object().keys({
     objectName: Joi.string().required(),
     objectType: Joi.string().required(),
+    objectUsers: Joi.array(),
     objectClientId: Joi.string().required().custom(objectId),
     objectDeviceId: Joi.string().required().custom(objectId),
     objectIsInParkingMode: Joi.boolean(),
-    objectSensors: Joi.array().required(),
     objectStatus: Joi.string().required(),
     objectIcon: Joi.string(),
   }),
 };
 
-const getDevices = {
+const getObjects = {
   query: Joi.object().keys({
     objectName: Joi.string(),
     objectType: Joi.string(),
     objectClientId: Joi.string().custom(objectId),
-    objectDeviceId: Joi.string().required().custom(objectId),
+    objectDeviceId: Joi.string().custom(objectId),
     objectIsInParkingMode: Joi.boolean(),
     objectStatus: Joi.string(),
     sortBy: Joi.string(),
@@ -28,40 +28,40 @@ const getDevices = {
   }),
 };
 
-const getDevice = {
+const getObject = {
   params: Joi.object().keys({
-    deviceId: Joi.string().custom(objectId),
+    objectId: Joi.string().custom(objectId),
   }),
 };
 
-const updateDevice = {
+const updateObject = {
   params: Joi.object().keys({
-    deviceId: Joi.required().custom(objectId),
+    objectId: Joi.required().custom(objectId),
   }),
   body: Joi.object()
     .keys({
       objectName: Joi.string(),
       objectType: Joi.string(),
+      objectUsers: Joi.array(),
       objectClientId: Joi.string().custom(objectId),
       objectDeviceId: Joi.string().custom(objectId),
       objectIsInParkingMode: Joi.boolean(),
-      objectSensors: Joi.array(),
       objectStatus: Joi.string(),
       objectIcon: Joi.string(),
     })
     .min(1),
 };
 
-const deleteDevice = {
+const deleteObject = {
   params: Joi.object().keys({
-    deviceId: Joi.string().custom(objectId),
+    objectId: Joi.string().custom(objectId),
   }),
 };
 
 module.exports = {
-  createDevice,
-  getDevices,
-  getDevice,
-  updateDevice,
-  deleteDevice,
+  createObject,
+  getObjects,
+  getObject,
+  updateObject,
+  deleteObject,
 };

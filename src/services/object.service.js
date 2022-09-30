@@ -1,6 +1,7 @@
 const httpStatus = require('http-status');
 const { Object } = require('../models');
 const ApiError = require('../utils/ApiError');
+const { updateDeviceById } = require('./device.service');
 
 /**
  * Create a object
@@ -11,7 +12,13 @@ const createObject = async (objectBody) => {
   if (await Object.isDeviceAssigned(objectBody.objectDeviceId)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'device assigned to other object');
   }
-  return Object.create(objectBody);
+  const object = await Object.create(objectBody);
+
+  if (object._id) {
+    await updateDeviceById(objectBody.objectDeviceId, { deviceStatus: 'assigned' });
+  }
+
+  return object;
 };
 
 /**
@@ -48,11 +55,14 @@ const updateObjectById = async (objectId, updateBody) => {
   if (!object) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Object not found');
   }
-  if (updateBody.objectDeviceId && (await Object.isDeviceAssigned(updateBody.objectDeviceId))) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'device assigned to other object');
+  if (updateBody.objectDeviceId && object.objectDeviceId !== updateBody.objectDeviceId) {
+    if (await Object.isDeviceAssigned(updateBody.objectDeviceId)) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'device assigned to other object');
+    }
+    Object.assign(object, updateBody);
+    await object.save();
+    await updateDeviceById(object.objectDeviceId, { deviceStatus: 'unassigned' });
   }
-  Object.assign(object, updateBody);
-  await object.save();
   return object;
 };
 

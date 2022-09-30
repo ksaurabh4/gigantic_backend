@@ -1,7 +1,7 @@
 const express = require('express');
 const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
-const clientValidation = require('../../validations/device.validation');
+const clientValidation = require('../../validations/client.validation');
 const clientController = require('../../controllers/client.controller');
 
 const router = express.Router();
@@ -10,6 +10,8 @@ router
   .route('/')
   .post(auth('manageClients'), validate(clientValidation.createClient), clientController.createClient)
   .get(auth('getClients'), validate(clientValidation.getClients), clientController.getClients);
+
+router.route('/list').get(auth('getClients'), validate(clientValidation.getClients), clientController.getClientsList);
 
 router
   .route('/:clientId')

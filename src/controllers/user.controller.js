@@ -17,6 +17,14 @@ const getUsers = catchAsync(async (req, res) => {
   res.send(result);
 });
 
+const getUsersList = catchAsync(async (req, res) => {
+  const filter = pick(req.query, ['userCompId']);
+  // filter.compParentId = req.user.userCompId;
+  const options = pick(req.query, ['sortBy', 'limit', 'page']);
+  const result = await userService.queryUsersList(filter, options);
+  res.send(result);
+});
+
 const getUser = catchAsync(async (req, res) => {
   const user = await userService.getUserById(req.params.userId);
   if (!user) {
@@ -42,6 +50,7 @@ const deleteUser = catchAsync(async (req, res) => {
 module.exports = {
   createUser,
   getUsers,
+  getUsersList,
   getUser,
   updateUser,
   deleteUser,

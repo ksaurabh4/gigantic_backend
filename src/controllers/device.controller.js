@@ -12,8 +12,17 @@ const createDevice = catchAsync(async (req, res) => {
 
 const getDevices = catchAsync(async (req, res) => {
   const filter = pick(req.query, ['deviceStatus', 'deviceModelId']);
+  filter.deviceClientId = req.user.userCompId;
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
   const result = await deviceService.queryDevices(filter, options);
+  res.send(result);
+});
+
+const getDevicesList = catchAsync(async (req, res) => {
+  const filter = pick(req.query, ['deviceClientId', 'deviceStatus']);
+  // filter.compParentId = req.user.userCompId;
+  const options = pick(req.query, ['sortBy', 'limit', 'page']);
+  const result = await deviceService.queryDevicesList(filter, options);
   res.send(result);
 });
 
@@ -42,6 +51,7 @@ const deleteDevice = catchAsync(async (req, res) => {
 module.exports = {
   createDevice,
   getDevices,
+  getDevicesList,
   getDevice,
   updateDevice,
   deleteDevice,

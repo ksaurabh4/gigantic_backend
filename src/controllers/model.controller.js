@@ -17,6 +17,13 @@ const getModels = catchAsync(async (req, res) => {
   res.send(result);
 });
 
+const getModelsList = catchAsync(async (req, res) => {
+  const filter = pick(req.query, ['modelPort']);
+  const options = pick(req.query, ['sortBy', 'limit', 'page']);
+  const result = await modelService.queryModelsList(filter, options);
+  res.send(result);
+});
+
 const getModel = catchAsync(async (req, res) => {
   const model = await modelService.getModelById(req.params.modelId);
   if (!model) {
@@ -42,6 +49,7 @@ const deleteModel = catchAsync(async (req, res) => {
 module.exports = {
   createModel,
   getModels,
+  getModelsList,
   getModel,
   updateModel,
   deleteModel,

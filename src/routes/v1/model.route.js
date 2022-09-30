@@ -11,6 +11,8 @@ router
   .post(auth('manageModels'), validate(modelValidation.createModel), modelController.createModel)
   .get(auth('getModels'), validate(modelValidation.getModels), modelController.getModels);
 
+router.route('/list').get(auth('getClients'), validate(modelValidation.getModels), modelController.getModelsList);
+
 router
   .route('/:modelId')
   .get(auth('getModels'), validate(modelValidation.getModel), modelController.getModel)
