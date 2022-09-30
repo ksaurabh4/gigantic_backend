@@ -37,9 +37,9 @@ const deviceSchema = mongoose.Schema({
   deviceSensors: [
     {
       parameterName: String,
-      sensorId: { type: mongoose.Schema.Types.ObjectId, ref: 'sensors' },
+      sensorId: { type: mongoose.Schema.Types.ObjectId, ref: 'Sensor' },
       readingType: String,
-      fuelCalibData: { type: mongoose.Schema.Types.ObjectId, ref: 'fuel' },
+      fuelCalibData: { type: mongoose.Schema.Types.ObjectId, ref: 'Fuel' },
     },
   ],
   deviceStatus: {
