@@ -11,6 +11,8 @@ router
   .post(auth('manageDevices'), validate(deviceValidation.createDevice), deviceController.createDevice)
   .get(auth('getDevices'), validate(deviceValidation.getDevices), deviceController.getDevices);
 
+router.route('/list').get(auth('getDevices'), validate(deviceValidation.getDevice), deviceController.getDevicesList);
+
 router
   .route('/:deviceId')
   .get(auth('getDevices'), validate(deviceValidation.getDevice), deviceController.getDevice)

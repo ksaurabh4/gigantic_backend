@@ -38,7 +38,7 @@ const queryDevices = async (filter, options) => {
  * @returns {Promise<QueryResult>}
  */
 const queryDevicesList = async (filter, options) => {
-  const devices = await Device.paginate(filter, options, ['deviceImei']);
+  const devices = await Device.paginate(filter, options, ['deviceImei', 'deviceSimNumber']);
   return devices;
 };
 /**

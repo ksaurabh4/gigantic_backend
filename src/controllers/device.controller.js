@@ -11,7 +11,6 @@ const createDevice = catchAsync(async (req, res) => {
 });
 
 const getDevices = catchAsync(async (req, res) => {
-  console.log(req.user);
   const filter = pick(req.query, ['deviceStatus', 'deviceModelId']);
   filter.deviceClientId = req.user.userCompId;
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
@@ -20,8 +19,8 @@ const getDevices = catchAsync(async (req, res) => {
 });
 
 const getDevicesList = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['deviceStatus']);
-  filter.compParentId = req.user.userCompId;
+  const filter = pick(req.query, ['deviceClientId', 'deviceStatus']);
+  // filter.compParentId = req.user.userCompId;
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
   const result = await deviceService.queryDevicesList(filter, options);
   res.send(result);

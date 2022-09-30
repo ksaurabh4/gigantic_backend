@@ -14,9 +14,10 @@ const objectSchema = mongoose.Schema({
     default: 'Car',
   },
   objectIcon: String,
-  objectClientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Company' },
+  objectClientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Client' },
   objectDeviceId: { type: mongoose.Schema.Types.ObjectId, ref: 'Device' },
   objectIsInParkingMode: { type: Boolean, default: false },
+  objectUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   objectStatus: {
     type: String,
     enum: ['notactivated', 'activated', 'deactivated', 'expired', 'removed'],
