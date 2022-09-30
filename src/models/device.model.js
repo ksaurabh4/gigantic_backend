@@ -27,6 +27,7 @@ const deviceSchema = mongoose.Schema({
     type: String,
     unique: true,
     trim: true,
+    sparse: true,
   },
   deviceSimProvider: {
     type: String,
