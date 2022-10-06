@@ -14,7 +14,7 @@ const getDevices = catchAsync(async (req, res) => {
   const filter = pick(req.query, ['deviceStatus', 'deviceModelId']);
   filter.deviceClientId = req.user.userCompId;
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
-  options.populate = 'deviceSensors.sensorId';
+  options.populate = 'deviceSensors.sensorId, deviceModelId, deviceClientId';
   const result = await deviceService.queryDevices(filter, options);
   res.send(result);
 });

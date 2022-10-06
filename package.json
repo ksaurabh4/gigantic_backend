@@ -1,5 +1,5 @@
 {
-  "name": "create-nodejs-express-app",
+  "name": "gigantic-backend-server",
   "version": "1.0.0",
   "description": "Create a Node.js app for building production-ready RESTful APIs using Express, by running one command",
   "bin": "bin/createNodejsApp.js",
@@ -54,6 +54,8 @@
     "compression": "^1.7.4",
     "cors": "^2.8.5",
     "cross-env": "^7.0.0",
+    "death": "^1.1.0",
+    "debug": "^4.3.4",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-mongo-sanitize": "^2.0.0",
@@ -65,15 +67,19 @@
     "moment": "^2.24.0",
     "mongoose": "^5.7.7",
     "morgan": "^1.9.1",
+    "mysql": "^2.18.1",
+    "node-toobusy": "^0.6.3",
     "nodemailer": "^6.3.1",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "pm2": "^5.1.0",
+    "portfinder": "^1.0.32",
     "swagger-jsdoc": "^6.0.8",
     "swagger-ui-express": "^4.1.6",
     "validator": "^13.0.0",
     "winston": "^3.2.1",
-    "xss-clean": "^0.1.1"
+    "xss-clean": "^0.1.1",
+    "yarn": "^1.22.19"
   },
   "devDependencies": {
     "coveralls": "^3.0.7",

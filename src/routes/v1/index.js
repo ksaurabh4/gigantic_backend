@@ -6,6 +6,7 @@ const deviceRoute = require('./device.route');
 const objectRoute = require('./object.route');
 const modelRoute = require('./model.route');
 const docsRoute = require('./docs.route');
+const trackingRoute = require('./tracking.route');
 const config = require('../../config/config');
 
 const router = express.Router();
@@ -34,6 +35,10 @@ const defaultRoutes = [
   {
     path: '/models',
     route: modelRoute,
+  },
+  {
+    path: '/tracking',
+    route: trackingRoute,
   },
 ];
 

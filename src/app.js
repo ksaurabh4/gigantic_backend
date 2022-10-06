@@ -1,3 +1,4 @@
+const toobusy = require('node-toobusy');
 const express = require('express');
 const helmet = require('helmet');
 const xss = require('xss-clean');
@@ -13,6 +14,7 @@ const { authLimiter } = require('./middlewares/rateLimiter');
 const routes = require('./routes/v1');
 const { errorConverter, errorHandler } = require('./middlewares/error');
 const ApiError = require('./utils/ApiError');
+const logger = require('./config/logger');
 
 const app = express();
 
@@ -36,6 +38,16 @@ app.use(mongoSanitize());
 
 // gzip compression
 app.use(compression());
+
+// middleware which blocks requests when server is too busy
+app.use((req, res, next) => {
+  if (toobusy()) {
+    res.status(503);
+    res.send('Server is busy right now, sorry.');
+  } else {
+    next();
+  }
+});
 
 // enable cors
 app.use(cors());
@@ -64,5 +76,40 @@ app.use(errorConverter);
 
 // handle error
 app.use(errorHandler);
+
+let server;
+
+const exitHandler = () => {
+  if (server) {
+    server.close(() => {
+      logger.info('Server closed');
+      process.exit(1);
+    });
+  } else {
+    process.exit(1);
+  }
+};
+
+const unexpectedErrorHandler = (error) => {
+  logger.error(error);
+  exitHandler();
+};
+
+process.on('SIGINT', () => {
+  logger.log('stopping the server');
+  process.exit();
+});
+
+// process.on('SIGTERM', () => {
+//   logger.info('SIGTERM received');
+//   if (server) {
+//     server.close();
+//   }
+// });
+
+// globally catching unhandled exceptions
+process.on('uncaughtException', unexpectedErrorHandler);
+// globally catching unhandled promise rejections
+process.on('unhandledRejection', unexpectedErrorHandler);
 
 module.exports = app;

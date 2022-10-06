@@ -6,3 +6,4 @@ module.exports.clientService = require('./client.service');
 module.exports.deviceService = require('./device.service');
 module.exports.objectService = require('./object.service');
 module.exports.modelService = require('./model.service');
+module.exports.trackingService = require('./tracking.service');

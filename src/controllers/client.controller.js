@@ -14,6 +14,7 @@ const getClients = catchAsync(async (req, res) => {
   const filter = pick(req.query, ['compIsReseller']);
   filter.compHirerchy = { $in: [req.user.userCompId] };
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
+  options.populate = 'compParentId';
   const result = await clientService.queryClients(filter, options);
   res.send(result);
 });
