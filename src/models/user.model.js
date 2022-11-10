@@ -46,7 +46,6 @@ const userSchema = mongoose.Schema({
   },
   userPhone: {
     type: String,
-    required: true,
     trim: true,
   },
   userFullName: {

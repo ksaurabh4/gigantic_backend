@@ -1,6 +1,6 @@
 const allRoles = {
-  user: ['changePassword', 'canImmobilize', 'getTrackingData',],
-  admin: ['getUsers', 'manageUsers', 'changePassword', 'canImmobilize', 'getTrackingData',],
+  user: ['changePassword', 'canImmobilize', 'getTrackingData','sendCommand'],
+  admin: ['getUsers', 'manageUsers', 'changePassword', 'canImmobilize', 'getTrackingData','sendCommand'],
   reseller: [
     'getUsers',
     'manageUsers',
@@ -14,6 +14,7 @@ const allRoles = {
     'manageObjects',
     'getObjects',
     'getTrackingData',
+    'sendCommand'
   ],
   superadmin: [
     'getUsers',
@@ -29,6 +30,7 @@ const allRoles = {
     'manageObjects',
     'getObjects',
     'getTrackingData',
+    'sendCommand',
   ],
 };
 

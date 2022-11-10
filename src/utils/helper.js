@@ -18,6 +18,7 @@ exports.returnPromise = (query, values) => new Promise((resolve, reject) => {
   }
 });
 
-exports.fetchDevicesTrackingDataQuery = (filter, options) => {
-  return 'SELECT * FROM sw_obj_data';
+exports.fetchDevicesTrackingDataQuery = (filter, options,imeis) => {
+  const imeisString = imeis.join();
+  return `SELECT * FROM sw_obj_data WHERE imei IN (${imeisString})`;
 }

@@ -11,6 +11,10 @@ router
   // .post(auth('manageObjects'), validate(trackingValidation.createObject), trackingController.createObject)
   .get(auth('getTrackingData'), validate(trackingValidation.getDevicesTrackingData), trackingController.getDevicesTrackingData);
 
+  router
+  .route('/cmd')
+  .post(auth('sendCommand'), validate(trackingValidation.sendCommand), trackingController.sendCommand);
+
 router
   .route('/:imei')
   .get(auth('getTrackingData'), validate(trackingValidation.getDevicesTrackingData), trackingController.getDeviceTrackingData)

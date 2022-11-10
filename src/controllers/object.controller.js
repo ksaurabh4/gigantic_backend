@@ -12,6 +12,7 @@ const createObject = catchAsync(async (req, res) => {
 
 const getObjects = catchAsync(async (req, res) => {
   const filter = pick(req.query, ['objectStatus', 'objectModelId']);
+  filter.objectClientId = req.user.userCompId;
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
   options.populate = 'objectDeviceId,objectClientId';
   const result = await objectService.queryObjects(filter, options);

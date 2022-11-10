@@ -55,8 +55,8 @@ const clientSchema = mongoose.Schema({
   },
   compPreferredLang: { type: String, default: 'english' },
   compPreferredCoordinates: {
-    type: { type: String },
-    coordinates: [],
+    cordinateType: { type: String },
+    coordinates:[],
   },
   compDomain: { type: String },
   compIp: { type: String },

@@ -2,6 +2,7 @@ const httpStatus = require('http-status');
 const axios = require('axios').default;
 const { Device } = require('../models');
 const ApiError = require('../utils/ApiError');
+const { getObjectByImei, updateObjectById, updateObjectByImei } = require('./object.service');
 
 /**
  * Create a device
@@ -60,12 +61,16 @@ const getDeviceById = async (id) => {
  * @returns {Promise<Device>}
  */
 const updateDeviceById = async (deviceId, updateBody) => {
-  const device = await getDeviceById(deviceId);
+  let device = await getDeviceById(deviceId);
   if (!device) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Device not found');
   }
+  const deviceOldImei = device.deviceImei;
   Object.assign(device, updateBody);
   await device.save();
+  if (updateBody.deviceImei){
+    await updateObjectByImei(deviceOldImei, { objectDeviceImei: updateBody.deviceImei });
+  }
   axios.post('http://localhost:3001/api/refresh');
   return device;
 };

@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { Object } = require('../models');
+const { Object: ObjectModel } = require('../models');
 const ApiError = require('../utils/ApiError');
 const { updateDeviceById } = require('./device.service');
 
@@ -9,12 +9,13 @@ const { updateDeviceById } = require('./device.service');
  * @returns {Promise<Object>}
  */
 const createObject = async (objectBody) => {
-  if (await Object.isDeviceAssigned(objectBody.objectDeviceId)) {
+  if (await ObjectModel.isDeviceAssigned(objectBody.objectDeviceId)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'device assigned to other object');
   }
-  const object = await Object.create(objectBody);
+  const object = await ObjectModel.create(objectBody);
 
   if (object._id) {
+    console.log(updateDeviceById);
     await updateDeviceById(objectBody.objectDeviceId, { deviceStatus: 'assigned' });
   }
 
@@ -31,7 +32,7 @@ const createObject = async (objectBody) => {
  * @returns {Promise<QueryResult>}
  */
 const queryObjects = async (filter, options) => {
-  const objects = await Object.paginate(filter, options);
+  const objects = await ObjectModel.paginate(filter, options);
   return objects;
 };
 
@@ -41,7 +42,42 @@ const queryObjects = async (filter, options) => {
  * @returns {Promise<Object>}
  */
 const getObjectById = async (id) => {
-  return Object.findById(id);
+  return ObjectModel.findById(id);
+};
+
+/**
+ * Get object by imei
+ * @param {string} imei
+ * @returns {Promise<Object>}
+ */
+const getObjectByImei = async (imei) => {
+  const object = await ObjectModel.find({ objectDeviceImei: imei });
+  return object[0];
+};
+
+/**
+ * Update object by imei
+ * @param {ObjectId} imei
+ * @param {Object} updateBody
+ * @returns {Promise<Object>}
+ */
+const updateObjectByImei = async (imei, updateBody) => {
+  const object = await getObjectByImei(imei);
+  if (!object) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'this Object not found');
+  }
+  if (updateBody.objectDeviceId && object.objectDeviceId !== updateBody.objectDeviceId) {
+    if (await ObjectModel.isDeviceAssigned(updateBody.objectDeviceId)) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'device assigned to other object');
+    }
+    Object.assign(object, updateBody);
+    await object.save();
+    await updateDeviceById(object.objectDeviceId, { deviceStatus: 'unassigned' });
+  }else{
+    Object.assign(object, updateBody);
+    await object.save();
+  }
+  return object;
 };
 
 /**
@@ -56,12 +92,15 @@ const updateObjectById = async (objectId, updateBody) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Object not found');
   }
   if (updateBody.objectDeviceId && object.objectDeviceId !== updateBody.objectDeviceId) {
-    if (await Object.isDeviceAssigned(updateBody.objectDeviceId)) {
+    if (await ObjectModel.isDeviceAssigned(updateBody.objectDeviceId)) {
       throw new ApiError(httpStatus.BAD_REQUEST, 'device assigned to other object');
     }
     Object.assign(object, updateBody);
     await object.save();
     await updateDeviceById(object.objectDeviceId, { deviceStatus: 'unassigned' });
+  } else {
+    Object.assign(object, updateBody);
+    await object.save();
   }
   return object;
 };
@@ -84,6 +123,8 @@ module.exports = {
   createObject,
   queryObjects,
   getObjectById,
+  getObjectByImei,
   updateObjectById,
+  updateObjectByImei,
   deleteObjectById,
 };

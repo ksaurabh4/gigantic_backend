@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { Object } = require('../models');
+const { Object, Device } = require('../models');
 const ApiError = require('../utils/ApiError');
 const { returnPromise, fetchDevicesTrackingDataQuery } = require('../utils/helper');
 
@@ -14,10 +14,21 @@ const { returnPromise, fetchDevicesTrackingDataQuery } = require('../utils/helpe
  * @returns {Promise<QueryResult>}
  */
 const queryDevicesTrackingData = async (filter, options) => {
-  const query = fetchDevicesTrackingDataQuery(filter, options);
+  const imeis = await fetchUserImeis(filter);
+  const query = fetchDevicesTrackingDataQuery(filter, options, imeis);
   const response = await returnPromise(query);
-  return response;
+  const objects = await Object.find(filter, { _id: 0, objectDeviceImei: 1, objectName: 1, objectType: 1, objectIsInParkingMode: 1 });
+  return { trackingData: response, staticData: objects };
 };
+
+const fetchUserImeis = async (filter) => {
+  try {
+    const imeis = await Object.find(filter).distinct('objectDeviceImei');
+    return imeis;
+  } catch (error) {
+    console.log('deviceimeierror', error)
+  }
+}
 
 /**
  * Get object by id
@@ -30,7 +41,21 @@ const queryDeviceTrackingDataByImei = async (imei) => {
   return response;
 };
 
+/**
+ * Get array of objects by id
+ * @param {string} imei
+ * @param {date} from
+ * @param {date} to
+ * @returns {Promise<Object>}
+ */
+const queryDeviceHistoryDataByImei = async (imei) => {
+  const query = `SELECT * FROM sw_obj_${imei} WHERE imei=${imei} `;
+  const response = await returnPromise(query);
+  return response;
+};
+
 module.exports = {
   queryDevicesTrackingData,
   queryDeviceTrackingDataByImei,
+  queryDeviceHistoryDataByImei,
 };

@@ -16,6 +16,12 @@ const objectSchema = mongoose.Schema({
   objectIcon: String,
   objectClientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Client' },
   objectDeviceId: { type: mongoose.Schema.Types.ObjectId, ref: 'Device' },
+  objectDeviceImei: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+  },
   objectIsInParkingMode: { type: Boolean, default: false },
   objectUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   objectStatus: {
