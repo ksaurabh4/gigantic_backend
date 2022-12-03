@@ -101,7 +101,7 @@ const sendCommand = catchAsync(async (req, res) => {
 
   let userId = req.userId;
   let user = req.user;
-  const { imei, cmdType, sentFrom, userPin, port } = req.body;
+  const { imei, cmdType, cmdContent, sentFrom, userPin, port } = req.body;
 
   // if (user.immobilizeVehicles === undefined || !user.immobilizeVehicles) {
   //   return res
@@ -122,6 +122,7 @@ const sendCommand = catchAsync(async (req, res) => {
       JSON.stringify({
         imei: imei,
         cmdType: cmdType,
+        cmdContent: cmdContent,
         port: port,
       })
     );
@@ -199,28 +200,28 @@ const sendCommand = catchAsync(async (req, res) => {
       // );
     }
 
-    if (isSuccess) {
-      axios
-        .post('http://localhost:3001/api/cutoff', {
-          imei: imei,
-          cutoffValue: cmdType == 'cutoff_disconnect',
-        })
-        .then((data) => {
-          return res
-            .status(200)
-            .send({ message: response, isSuccess, cutoffStatus });
-        })
-        .catch((e) => {
-          console.log(e);
-          return res
-            .status(200)
-            .send({ message: response, isSuccess, cutoffStatus });
-        });
-    } else {
+    // if (isSuccess) {
+    //   axios
+    //     .post('http://localhost:3001/api/cutoff', {
+    //       imei: imei,
+    //       cutoffValue: cmdType == 'cutoff_disconnect',
+    //     })
+    //     .then((data) => {
+    //       return res
+    //         .status(200)
+    //         .send({ message: response, isSuccess, cutoffStatus });
+    //     })
+    //     .catch((e) => {
+    //       console.log(e);
+    //       return res
+    //         .status(200)
+    //         .send({ message: response, isSuccess, cutoffStatus });
+    //     });
+    // } else {
       return res
         .status(200)
         .send({ message: response, isSuccess, cutoffStatus });
-    }
+    // }
   });
 
   client.on('close', function () {

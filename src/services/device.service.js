@@ -2,7 +2,7 @@ const httpStatus = require('http-status');
 const axios = require('axios').default;
 const { Device } = require('../models');
 const ApiError = require('../utils/ApiError');
-const { getObjectByImei, updateObjectById, updateObjectByImei } = require('./object.service');
+// const { updateObjectByImei } = require('./object.service');
 
 /**
  * Create a device
@@ -69,7 +69,8 @@ const updateDeviceById = async (deviceId, updateBody) => {
   Object.assign(device, updateBody);
   await device.save();
   if (updateBody.deviceImei){
-    await updateObjectByImei(deviceOldImei, { objectDeviceImei: updateBody.deviceImei });
+    // await updateObjectByImei(deviceOldImei, { objectDeviceImei: updateBody.deviceImei });
+    // await axios.post('http://localhost:3001/v1/objects', { objectDeviceImei: updateBody.deviceImei })
   }
   axios.post('http://localhost:3001/api/refresh');
   return device;

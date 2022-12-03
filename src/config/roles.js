@@ -1,6 +1,8 @@
 const allRoles = {
-  user: ['changePassword', 'canImmobilize', 'getTrackingData','sendCommand'],
-  admin: ['getUsers', 'manageUsers', 'changePassword', 'canImmobilize', 'getTrackingData','sendCommand'],
+  user: ['changePassword', 'canImmobilize', 'getTrackingData', 'sendCommand',
+    'getAlerts',],
+  admin: ['getUsers', 'manageUsers', 'changePassword', 'canImmobilize',
+    'getAlerts', 'getTrackingData', 'sendCommand'],
   reseller: [
     'getUsers',
     'manageUsers',
@@ -11,6 +13,7 @@ const allRoles = {
     'manageDevices',
     'getDevices',
     'getModels',
+    'getAlerts',
     'manageObjects',
     'getObjects',
     'getTrackingData',
@@ -27,6 +30,8 @@ const allRoles = {
     'getDevices',
     'manageModels',
     'getModels',
+    'manageAlerts',
+    'getAlerts',
     'manageObjects',
     'getObjects',
     'getTrackingData',

@@ -22,6 +22,7 @@ const sendCommand = {
   body: Joi.object().keys({
     imei: Joi.string().required(),
     cmdType: Joi.string().required(),
+    cmdContent: Joi.string().required(),
     port: Joi.string().required(),
     sentFrom: Joi.string(),
     devicePin: Joi.string(),

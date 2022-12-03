@@ -4,3 +4,6 @@ module.exports.clientValidation = require('./client.validation');
 module.exports.deviceValidation = require('./device.validation');
 module.exports.objectValidation = require('./object.validation');
 module.exports.modelValidation = require('./model.validation');
+module.exports.alertValidation = require('./alert.validation');
+module.exports.userAlertValidation = require('./userAlert.validation');
+module.exports.trackingValidation = require('./tracking.validation');

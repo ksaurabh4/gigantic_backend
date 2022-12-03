@@ -5,6 +5,8 @@ const clientRoute = require('./client.route');
 const deviceRoute = require('./device.route');
 const objectRoute = require('./object.route');
 const modelRoute = require('./model.route');
+const alertRoute = require('./alert.route');
+const userAlertRoute = require('./userAlert.route');
 const docsRoute = require('./docs.route');
 const trackingRoute = require('./tracking.route');
 const config = require('../../config/config');
@@ -39,6 +41,14 @@ const defaultRoutes = [
   {
     path: '/tracking',
     route: trackingRoute,
+  },
+  {
+    path: '/alerts',
+    route: alertRoute,
+  },
+  {
+    path: '/useralerts',
+    route: userAlertRoute,
   },
 ];
 

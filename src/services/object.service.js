@@ -15,7 +15,7 @@ const createObject = async (objectBody) => {
   const object = await ObjectModel.create(objectBody);
 
   if (object._id) {
-    console.log(updateDeviceById);
+    // console.log(updateDeviceById);
     await updateDeviceById(objectBody.objectDeviceId, { deviceStatus: 'assigned' });
   }
 

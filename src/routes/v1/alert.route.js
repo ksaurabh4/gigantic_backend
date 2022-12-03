@@ -1,40 +1,40 @@
 const express = require('express');
 const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
-const modelValidation = require('../../validations/model.validation');
-const modelController = require('../../controllers/model.controller');
+const alertValidation = require('../../validations/alert.validation');
+const alertController = require('../../controllers/alert.controller');
 
 const router = express.Router();
 
 router
   .route('/')
-  .post(auth('manageModels'), validate(modelValidation.createModel), modelController.createModel)
-  .get(auth('getModels'), validate(modelValidation.getModels), modelController.getModels);
+  .post(auth('manageAlerts'), validate(alertValidation.createAlert), alertController.createAlert)
+  .get(auth('getAlerts'), validate(alertValidation.getAlerts), alertController.getAlerts);
 
-router.route('/list').get(auth('getModels'), validate(modelValidation.getModels), modelController.getModelsList);
+router.route('/list').get(auth('getAlerts'), validate(alertValidation.getAlerts), alertController.getAlertsList);
 
 router
-  .route('/:modelId')
-  .get(auth('getModels'), validate(modelValidation.getModel), modelController.getModel)
-  .patch(auth('manageModels'), validate(modelValidation.updateModel), modelController.updateModel)
-  .delete(auth('manageModels'), validate(modelValidation.deleteModel), modelController.deleteModel);
+  .route('/:alertId')
+  .get(auth('getAlerts'), validate(alertValidation.getAlert), alertController.getAlert)
+  .patch(auth('manageAlerts'), validate(alertValidation.updateAlert), alertController.updateAlert)
+  .delete(auth('manageAlerts'), validate(alertValidation.deleteAlert), alertController.deleteAlert);
 
 module.exports = router;
 
 /**
  * @swagger
  * tags:
- *   name: Models
- *   description: Model management and retrieval
+ *   name: Alerts
+ *   description: Alert management and retrieval
  */
 
 /**
  * @swagger
- * /models:
+ * /alerts:
  *   post:
- *     summary: Create a model
- *     description: Only admins can create other models.
- *     tags: [Models]
+ *     summary: Create a alert
+ *     description: Only admins can create other alerts.
+ *     tags: [Alerts]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -62,19 +62,19 @@ module.exports = router;
  *                 description: At least one number and one letter
  *               role:
  *                  type: string
- *                  enum: [model, admin]
+ *                  enum: [alert, admin]
  *             example:
  *               name: fake name
  *               email: fake@example.com
  *               password: password1
- *               role: model
+ *               role: alert
  *     responses:
  *       "201":
  *         description: Created
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Model'
+ *                $ref: '#/components/schemas/Alert'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
  *       "401":
@@ -83,9 +83,9 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *
  *   get:
- *     summary: Get all models
- *     description: Only admins can retrieve all models.
- *     tags: [Models]
+ *     summary: Get all alerts
+ *     description: Only admins can retrieve all alerts.
+ *     tags: [Alerts]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -93,12 +93,12 @@ module.exports = router;
  *         name: name
  *         schema:
  *           type: string
- *         description: Model name
+ *         description: Alert name
  *       - in: query
  *         name: role
  *         schema:
  *           type: string
- *         description: Model role
+ *         description: Alert role
  *       - in: query
  *         name: sortBy
  *         schema:
@@ -110,7 +110,7 @@ module.exports = router;
  *           type: integer
  *           minimum: 1
  *         default: 10
- *         description: Maximum number of models
+ *         description: Maximum number of alerts
  *       - in: query
  *         name: page
  *         schema:
@@ -129,7 +129,7 @@ module.exports = router;
  *                 results:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/Model'
+ *                     $ref: '#/components/schemas/Alert'
  *                 page:
  *                   type: integer
  *                   example: 1
@@ -150,11 +150,11 @@ module.exports = router;
 
 /**
  * @swagger
- * /models/{id}:
+ * /alerts/{id}:
  *   get:
- *     summary: Get a model
- *     description: Logged in models can fetch only their own model information. Only admins can fetch other models.
- *     tags: [Models]
+ *     summary: Get a alert
+ *     description: Logged in alerts can fetch only their own alert information. Only admins can fetch other alerts.
+ *     tags: [Alerts]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -163,14 +163,14 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Model id
+ *         description: Alert id
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Model'
+ *                $ref: '#/components/schemas/Alert'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -179,9 +179,9 @@ module.exports = router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   patch:
- *     summary: Update a model
- *     description: Logged in models can only update their own information. Only admins can update other models.
- *     tags: [Models]
+ *     summary: Update a alert
+ *     description: Logged in alerts can only update their own information. Only admins can update other alerts.
+ *     tags: [Alerts]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -190,7 +190,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Model id
+ *         description: Alert id
  *     requestBody:
  *       required: true
  *       content:
@@ -219,7 +219,7 @@ module.exports = router;
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Model'
+ *                $ref: '#/components/schemas/Alert'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
  *       "401":
@@ -230,9 +230,9 @@ module.exports = router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   delete:
- *     summary: Delete a model
- *     description: Logged in models can delete only themselves. Only admins can delete other models.
- *     tags: [Models]
+ *     summary: Delete a alert
+ *     description: Logged in alerts can delete only themselves. Only admins can delete other alerts.
+ *     tags: [Alerts]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -241,7 +241,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Model id
+ *         description: Alert id
  *     responses:
  *       "200":
  *         description: No content

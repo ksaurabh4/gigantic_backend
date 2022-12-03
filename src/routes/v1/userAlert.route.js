@@ -1,40 +1,40 @@
 const express = require('express');
 const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
-const modelValidation = require('../../validations/model.validation');
-const modelController = require('../../controllers/model.controller');
+const userAlertValidation = require('../../validations/userAlert.validation');
+const userAlertController = require('../../controllers/userAlert.controller');
 
 const router = express.Router();
 
 router
   .route('/')
-  .post(auth('manageModels'), validate(modelValidation.createModel), modelController.createModel)
-  .get(auth('getModels'), validate(modelValidation.getModels), modelController.getModels);
+  .post(auth('manageUserAlerts'), validate(userAlertValidation.createUserAlert), userAlertController.createUserAlert)
+  .get(auth('getUserAlerts'), validate(userAlertValidation.getUserAlerts), userAlertController.getUserAlerts);
 
-router.route('/list').get(auth('getModels'), validate(modelValidation.getModels), modelController.getModelsList);
+router.route('/list').get(auth('getUserAlerts'), validate(userAlertValidation.getUserAlert), userAlertController.getUserAlertsList);
 
 router
-  .route('/:modelId')
-  .get(auth('getModels'), validate(modelValidation.getModel), modelController.getModel)
-  .patch(auth('manageModels'), validate(modelValidation.updateModel), modelController.updateModel)
-  .delete(auth('manageModels'), validate(modelValidation.deleteModel), modelController.deleteModel);
+  .route('/:userAlertId')
+  .get(auth('getUserAlerts'), validate(userAlertValidation.getUserAlert), userAlertController.getUserAlert)
+  .patch(auth('manageUserAlerts'), validate(userAlertValidation.updateUserAlert), userAlertController.updateUserAlert)
+  .delete(auth('manageUserAlerts'), validate(userAlertValidation.deleteUserAlert), userAlertController.deleteUserAlert);
 
 module.exports = router;
 
 /**
  * @swagger
  * tags:
- *   name: Models
- *   description: Model management and retrieval
+ *   name: UserAlerts
+ *   description: UserAlert management and retrieval
  */
 
 /**
  * @swagger
- * /models:
+ * /userAlerts:
  *   post:
- *     summary: Create a model
- *     description: Only admins can create other models.
- *     tags: [Models]
+ *     summary: Create a userAlert
+ *     description: Only admins can create other userAlerts.
+ *     tags: [UserAlerts]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -62,19 +62,19 @@ module.exports = router;
  *                 description: At least one number and one letter
  *               role:
  *                  type: string
- *                  enum: [model, admin]
+ *                  enum: [userAlert, admin]
  *             example:
  *               name: fake name
  *               email: fake@example.com
  *               password: password1
- *               role: model
+ *               role: userAlert
  *     responses:
  *       "201":
  *         description: Created
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Model'
+ *                $ref: '#/components/schemas/UserAlert'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
  *       "401":
@@ -83,9 +83,9 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *
  *   get:
- *     summary: Get all models
- *     description: Only admins can retrieve all models.
- *     tags: [Models]
+ *     summary: Get all userAlerts
+ *     description: Only admins can retrieve all userAlerts.
+ *     tags: [UserAlerts]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -93,12 +93,12 @@ module.exports = router;
  *         name: name
  *         schema:
  *           type: string
- *         description: Model name
+ *         description: UserAlert name
  *       - in: query
  *         name: role
  *         schema:
  *           type: string
- *         description: Model role
+ *         description: UserAlert role
  *       - in: query
  *         name: sortBy
  *         schema:
@@ -110,7 +110,7 @@ module.exports = router;
  *           type: integer
  *           minimum: 1
  *         default: 10
- *         description: Maximum number of models
+ *         description: Maximum number of userAlerts
  *       - in: query
  *         name: page
  *         schema:
@@ -129,7 +129,7 @@ module.exports = router;
  *                 results:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/Model'
+ *                     $ref: '#/components/schemas/UserAlert'
  *                 page:
  *                   type: integer
  *                   example: 1
@@ -150,11 +150,11 @@ module.exports = router;
 
 /**
  * @swagger
- * /models/{id}:
+ * /userAlerts/{id}:
  *   get:
- *     summary: Get a model
- *     description: Logged in models can fetch only their own model information. Only admins can fetch other models.
- *     tags: [Models]
+ *     summary: Get a userAlert
+ *     description: Logged in userAlerts can fetch only their own userAlert information. Only admins can fetch other userAlerts.
+ *     tags: [UserAlerts]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -163,14 +163,14 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Model id
+ *         description: UserAlert id
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Model'
+ *                $ref: '#/components/schemas/UserAlert'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -179,9 +179,9 @@ module.exports = router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   patch:
- *     summary: Update a model
- *     description: Logged in models can only update their own information. Only admins can update other models.
- *     tags: [Models]
+ *     summary: Update a userAlert
+ *     description: Logged in userAlerts can only update their own information. Only admins can update other userAlerts.
+ *     tags: [UserAlerts]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -190,7 +190,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Model id
+ *         description: UserAlert id
  *     requestBody:
  *       required: true
  *       content:
@@ -219,7 +219,7 @@ module.exports = router;
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Model'
+ *                $ref: '#/components/schemas/UserAlert'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
  *       "401":
@@ -230,9 +230,9 @@ module.exports = router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   delete:
- *     summary: Delete a model
- *     description: Logged in models can delete only themselves. Only admins can delete other models.
- *     tags: [Models]
+ *     summary: Delete a userAlert
+ *     description: Logged in userAlerts can delete only themselves. Only admins can delete other userAlerts.
+ *     tags: [UserAlerts]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -241,7 +241,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Model id
+ *         description: UserAlert id
  *     responses:
  *       "200":
  *         description: No content
