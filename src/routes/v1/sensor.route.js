@@ -1,42 +1,40 @@
 const express = require('express');
 const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
-const userAlertValidation = require('../../validations/userAlert.validation');
-const userAlertController = require('../../controllers/userAlert.controller');
+const sensorValidation = require('../../validations/sensor.validation');
+const sensorController = require('../../controllers/sensor.controller');
 
 const router = express.Router();
 
 router
   .route('/')
-  .post(auth('manageUserAlerts'), validate(userAlertValidation.createUserAlert), userAlertController.createUserAlert)
-  .get(auth('getUserAlerts'), validate(userAlertValidation.getUserAlerts), userAlertController.getUserAlerts);
+  .post(auth('manageSensors'), validate(sensorValidation.createSensor), sensorController.createSensor)
+  .get(auth('getSensors'), validate(sensorValidation.getSensors), sensorController.getSensors);
 
-router.route('/list').get(auth('getUserAlerts'), validate(userAlertValidation.getUserAlert), userAlertController.getUserAlertsList);
-
-router.route('/device/:deviceImei').get(auth('getUserAlerts'), validate(userAlertValidation.getUsersWithAlerts), userAlertController.getUsersWithAlerts);
+router.route('/list').get(auth('getSensors'), validate(sensorValidation.getSensors), sensorController.getSensorsList);
 
 router
-  .route('/:userId')
-  .get(auth('getUserAlerts'), validate(userAlertValidation.getUserAlert), userAlertController.getUserAlert)
-  .patch(auth('manageUserAlerts'), validate(userAlertValidation.updateUserAlert), userAlertController.updateUserAlert)
-  .delete(auth('manageUserAlerts'), validate(userAlertValidation.deleteUserAlert), userAlertController.deleteUserAlert);
+  .route('/:sensorId')
+  .get(auth('getSensors'), validate(sensorValidation.getSensor), sensorController.getSensor)
+  .patch(auth('manageSensors'), validate(sensorValidation.updateSensor), sensorController.updateSensor)
+  .delete(auth('manageSensors'), validate(sensorValidation.deleteSensor), sensorController.deleteSensor);
 
 module.exports = router;
 
 /**
  * @swagger
  * tags:
- *   name: UserAlerts
- *   description: UserAlert management and retrieval
+ *   name: Sensors
+ *   description: Sensor management and retrieval
  */
 
 /**
  * @swagger
- * /userAlerts:
+ * /sensors:
  *   post:
- *     summary: Create a userAlert
- *     description: Only admins can create other userAlerts.
- *     tags: [UserAlerts]
+ *     summary: Create a sensor
+ *     description: Only admins can create other sensors.
+ *     tags: [Sensors]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -64,19 +62,19 @@ module.exports = router;
  *                 description: At least one number and one letter
  *               role:
  *                  type: string
- *                  enum: [userAlert, admin]
+ *                  enum: [sensor, admin]
  *             example:
  *               name: fake name
  *               email: fake@example.com
  *               password: password1
- *               role: userAlert
+ *               role: sensor
  *     responses:
  *       "201":
  *         description: Created
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/UserAlert'
+ *                $ref: '#/components/schemas/Sensor'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
  *       "401":
@@ -85,9 +83,9 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *
  *   get:
- *     summary: Get all userAlerts
- *     description: Only admins can retrieve all userAlerts.
- *     tags: [UserAlerts]
+ *     summary: Get all sensors
+ *     description: Only admins can retrieve all sensors.
+ *     tags: [Sensors]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -95,12 +93,12 @@ module.exports = router;
  *         name: name
  *         schema:
  *           type: string
- *         description: UserAlert name
+ *         description: Sensor name
  *       - in: query
  *         name: role
  *         schema:
  *           type: string
- *         description: UserAlert role
+ *         description: Sensor role
  *       - in: query
  *         name: sortBy
  *         schema:
@@ -112,7 +110,7 @@ module.exports = router;
  *           type: integer
  *           minimum: 1
  *         default: 10
- *         description: Maximum number of userAlerts
+ *         description: Maximum number of sensors
  *       - in: query
  *         name: page
  *         schema:
@@ -131,7 +129,7 @@ module.exports = router;
  *                 results:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/UserAlert'
+ *                     $ref: '#/components/schemas/Sensor'
  *                 page:
  *                   type: integer
  *                   example: 1
@@ -152,11 +150,11 @@ module.exports = router;
 
 /**
  * @swagger
- * /userAlerts/{id}:
+ * /sensors/{id}:
  *   get:
- *     summary: Get a userAlert
- *     description: Logged in userAlerts can fetch only their own userAlert information. Only admins can fetch other userAlerts.
- *     tags: [UserAlerts]
+ *     summary: Get a sensor
+ *     description: Logged in sensors can fetch only their own sensor information. Only admins can fetch other sensors.
+ *     tags: [Sensors]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -165,14 +163,14 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: UserAlert id
+ *         description: Sensor id
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/UserAlert'
+ *                $ref: '#/components/schemas/Sensor'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -181,9 +179,9 @@ module.exports = router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   patch:
- *     summary: Update a userAlert
- *     description: Logged in userAlerts can only update their own information. Only admins can update other userAlerts.
- *     tags: [UserAlerts]
+ *     summary: Update a sensor
+ *     description: Logged in sensors can only update their own information. Only admins can update other sensors.
+ *     tags: [Sensors]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -192,7 +190,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: UserAlert id
+ *         description: Sensor id
  *     requestBody:
  *       required: true
  *       content:
@@ -221,7 +219,7 @@ module.exports = router;
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/UserAlert'
+ *                $ref: '#/components/schemas/Sensor'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
  *       "401":
@@ -232,9 +230,9 @@ module.exports = router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   delete:
- *     summary: Delete a userAlert
- *     description: Logged in userAlerts can delete only themselves. Only admins can delete other userAlerts.
- *     tags: [UserAlerts]
+ *     summary: Delete a sensor
+ *     description: Logged in sensors can delete only themselves. Only admins can delete other sensors.
+ *     tags: [Sensors]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -243,7 +241,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: UserAlert id
+ *         description: Sensor id
  *     responses:
  *       "200":
  *         description: No content

@@ -4,5 +4,6 @@ module.exports.clientController = require('./client.controller');
 module.exports.deviceController = require('./device.controller');
 module.exports.modelController = require('./model.controller');
 module.exports.objectController = require('./object.controller');
+module.exports.sensorController = require('./sensor.controller');
 module.exports.alertController = require('./alert.controller');
 module.exports.userAlertController = require('./userAlert.controller');

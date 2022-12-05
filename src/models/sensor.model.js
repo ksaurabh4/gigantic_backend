@@ -3,7 +3,7 @@ const { toJSON, paginate } = require('./plugins');
 
 const sensorSchema = mongoose.Schema({
   sensorName: { type: String, unique: true },
-  sensorValueType: {
+  sensorType: {
     type: String,
     enum: ['analog', 'digital', 'volt'],
     default: 'digital',
@@ -14,7 +14,6 @@ const sensorSchema = mongoose.Schema({
   deviceCreatedAt: Date,
   lastUpdatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   lastUpdatedAt: Date,
-  deviceDefaultPassword: { type: String, default: '' },
 });
 
 // add plugin that converts mongoose to json

@@ -12,17 +12,7 @@ const modelSchema = mongoose.Schema({
     required: true,
     trim: true,
   },
-  modelSensors: [
-    {
-      sensorName: String,
-      sensorType: {
-        type: String,
-        enum: ['analog', 'digital', 'volt'],
-        default: 'digital',
-      },
-      parameterName: String,
-    },
-  ],
+  modelSensors: [{type: mongoose.Schema.Types.ObjectId, ref: 'Sensor'}],
   modelCreatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   modelCreatedAt: Date,
   lastUpdatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },

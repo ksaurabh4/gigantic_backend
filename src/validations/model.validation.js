@@ -32,7 +32,7 @@ const updateModel = {
     .keys({
       modelName: Joi.string(),
       modelPort: Joi.number(),
-      modelSensors: Joi.array(),
+      modelSensors: Joi.array().items(Joi.required().custom(objectId)),
     })
     .min(1),
 };
