@@ -16,7 +16,7 @@ router.route('/list').get(auth('getUserAlerts'), validate(userAlertValidation.ge
 router.route('/device/:deviceImei').get(auth('getUserAlerts'), validate(userAlertValidation.getUsersWithAlerts), userAlertController.getUsersWithAlerts);
 
 router
-  .route('/:userId')
+  .route('/:userAlertId')
   .get(auth('getUserAlerts'), validate(userAlertValidation.getUserAlert), userAlertController.getUserAlert)
   .patch(auth('manageUserAlerts'), validate(userAlertValidation.updateUserAlert), userAlertController.updateUserAlert)
   .delete(auth('manageUserAlerts'), validate(userAlertValidation.deleteUserAlert), userAlertController.deleteUserAlert);

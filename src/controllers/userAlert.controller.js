@@ -11,12 +11,9 @@ const createUserAlert = catchAsync(async (req, res) => {
 });
 
 const getUserAlerts = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['userAlertStatus', 'userAlertModelId']);
-  if(req.user.role !== 'superadmin'){
-    filter.userAlertClientId = req.user.userCompId;
-  }
+  const filter = pick(req.query, ['userAlertStatus', 'userAlertUserId']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
-  options.populate = 'userAlertSensors.sensorId, userAlertModelId, userAlertClientId';
+  options.populate = 'userAlertId';
   const result = await userAlertService.queryUserAlerts(filter, options);
   res.send(result);
 });
