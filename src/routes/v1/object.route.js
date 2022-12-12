@@ -11,6 +11,8 @@ router
   .post(auth('manageObjects'), validate(objectValidation.createObject), objectController.createObject)
   .get(auth('getObjects'), validate(objectValidation.getObjects), objectController.getObjects);
 
+router.route('/list').get(auth('getObjects'), validate(objectValidation.getObject), objectController.getObjectsList);
+
 router
   .route('/:objectId')
   .get(auth('getObjects'), validate(objectValidation.getObject), objectController.getObject)

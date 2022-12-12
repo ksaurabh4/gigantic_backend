@@ -9,22 +9,26 @@ const ApiError = require('../utils/ApiError');
  * @param {Object} userAlertBody
  * @returns {Promise<UserAlert>}
  */
-const createUserAlert = async(userAlertBody) => {
+const createUserAlert = (userAlertBody) => {
   // if (await UserAlert.isUserAlertAdded(userAlertBody.userAlertImei)) {
   //   throw new ApiError(httpStatus.BAD_REQUEST, 'userAlert already added');
   // }
-  const { userAlerts, ...remainingUserAlertBody } = userAlertBody;
+  const { userAlerts, userAlertUserId, ...remainingUserAlertBody } = userAlertBody;
   // const userAlertObj =  {};
   // userAlerts.forEach(alert=>{
   //   userAlertObj[alert.alertId] = alert
   //   delete userAlertObj[alert.alertId].alertId
   // })
 
-  userAlerts.forEach((alert)=> {
+  userAlerts.forEach(async (alert)=> {
     const { alertId, alertValue, alertText } = alert;
-    UserAlert.create({ userAlertId: alertId, userAlertValue: alertValue, userAlertText: alertText, ...remainingUserAlertBody });
+    if (await UserAlert.isAlertAddedForThisUserForThisValue(userAlertUserId,alertId, alertValue)) {
+    // throw new ApiError(httpStatus.BAD_REQUEST, 'This alert already added for this user');
+  }else{
+      UserAlert.create({ userAlertId: alertId, userAlertValue: alertValue, userAlertText: alertText, userAlertUserId, ...remainingUserAlertBody });
+  }
   })
-  return {message: 'Alerts added successfully!'};
+  return { message: 'Alerts added successfully!' };
 };
 
 /**

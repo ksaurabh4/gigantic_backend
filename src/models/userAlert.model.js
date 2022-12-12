@@ -21,16 +21,16 @@ const userAlertSchema = mongoose.Schema({
 userAlertSchema.plugin(toJSON);
 userAlertSchema.plugin(paginate);
 
-// /**
-//  * Check if userAlert is already added for this user for this object
-//  * @param {string} objectId
-//  * @param {string} userId
-//  * @returns {Promise<boolean>}
-//  */
-// userAlertSchema.statics.isAlertAddedForThisObjectForThisUser = async function (objectId,userId) {
-//   const userAlert = await this.findOne({ userAlertObjectId: objectId, userAlertUserId: userId  });
-//   return !!userAlert;
-// };
+/**
+ * Check if userAlert is already added for this user for same value
+ * @param {string} objectId
+ * @param {string} userId
+ * @returns {Promise<boolean>}
+ */
+userAlertSchema.statics.isAlertAddedForThisUserForThisValue = async function (userId, alertId,alertValue) {
+  const userAlert = await this.findOne({ userAlertUserId: userId, userAlertId:alertId, userAlertValue: alertValue  });
+  return !!userAlert;
+};
 
 /**
  * @typedef UserAlert

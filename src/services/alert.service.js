@@ -34,7 +34,7 @@ const queryAlerts = async (filter, options) => {
  * @returns {Promise<QueryResult>}
  */
 const queryAlertsList = async (filter, options) => {
-  const alerts = await Alert.paginate(filter, options, ['alertName', 'alertPort']);
+  const alerts = await Alert.paginate(filter, options, ['alertName', 'alertType']);
   return alerts;
 };
 /**

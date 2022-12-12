@@ -7,9 +7,9 @@ const createUserAlert = {
     userAlertUserId: Joi.string().custom(objectId).required(),
     userAlertObjectsImei: Joi.array().required(),
     userAlertEnabledOn: Joi.array(),
-    userAlertWebhook: Joi.string(),
-    userAlertEmail: Joi.string(),
-    userAlertPhone: Joi.string(),
+    userAlertWebhook: Joi.string().optional().allow(''),
+    userAlertEmail: Joi.string().optional().allow(''),
+    userAlertPhone: Joi.string().optional().allow(''),
   }),
 };
 
@@ -41,7 +41,7 @@ const updateUserAlert = {
   }),
   body: Joi.object()
     .keys({
-      userAlertDevices: Joi.array(),
+      userAlertObjectsImei: Joi.array(),
       userAlertUserId: Joi.string().custom(objectId),
       userAlertText: Joi.string(),
       userAlertEnabledOn: Joi.array(),

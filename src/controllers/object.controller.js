@@ -19,6 +19,14 @@ const getObjects = catchAsync(async (req, res) => {
   res.send(result);
 });
 
+const getObjectsList = catchAsync(async (req, res) => {
+  const filter = pick(req.query, ['objectClientId', 'objectStatus',"objectUsers"]);
+  filter.objectClientId = req.user.userCompId;
+  const options = pick(req.query, ['sortBy', 'limit', 'page']);
+  const result = await objectService.queryObjectsList(filter, options);
+  res.send(result);
+});
+
 const getObject = catchAsync(async (req, res) => {
   const object = await objectService.getObjectById(req.params.objectId);
   if (!object) {
@@ -44,6 +52,7 @@ const deleteObject = catchAsync(async (req, res) => {
 module.exports = {
   createObject,
   getObjects,
+  getObjectsList,
   getObject,
   updateObject,
   deleteObject,

@@ -12,11 +12,32 @@ const getDevicesTrackingData = {
   }),
 };
 
+const getNotAddedDevicesData = {
+  query: Joi.object().keys({
+    protocol: Joi.string(),
+    sortBy: Joi.string(),
+    limit: Joi.number().integer(),
+    page: Joi.number().integer(),
+  }),
+};
+
 const getDeviceTrackingData = {
   params: Joi.object().keys({
     imei: Joi.string(),
   }),
 };
+
+const getDeviceDataByImei = {
+  query: Joi.object().keys({
+    imei: Joi.string(),
+    from: Joi.date().required(),
+    to: Joi.date().required(),
+    sortBy: Joi.string(),
+    limit: Joi.number().integer(),
+    page: Joi.number().integer(),
+  }),
+};
+
 
 const sendCommand = {
   body: Joi.object().keys({
@@ -33,6 +54,8 @@ const sendCommand = {
 
 module.exports = {
   getDevicesTrackingData,
+  getDeviceDataByImei,
+  getNotAddedDevicesData,
   getDeviceTrackingData,
   sendCommand,
 };
