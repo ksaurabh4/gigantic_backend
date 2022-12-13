@@ -167,22 +167,12 @@ WHERE (tripStatus = "ts" OR tripStatus = "te") AND deviceTime >= '${queryParams.
  */
 
 const queryAlertsByImei = async (queryParams) => {
-  const query = `SELECT convert_tz(serverTime,'+00:00','${queryParams.tz}') as serverTime, convert_tz(deviceTime,' + 00: 00','${queryParams.tz}') as deviceTime,imei,lat,lng,alert_name,alert_text,alert_value, speed,angle FROM sw_obj_alerts
-WHERE userId='' AND imei = '${queryParams.imei}' AND AND deviceTime >= '${queryParams.from}' AND deviceTime < '${queryParams.to}';`;
+  const query = `SELECT convert_tz(serverTime,'+00:00','${queryParams.tz}') as serverTime, convert_tz(deviceTime,'+00:00','${queryParams.tz}') as deviceTime,imei,lat,lng,alert_name,alert_text,alert_value, speed,angle FROM sw_obj_alerts
+WHERE userId='${queryParams.userId}' AND imei = '${queryParams.imei}' AND deviceTime >= '${queryParams.from}' AND deviceTime < '${queryParams.to}';`;
   console.log(query);
 
   const response = await returnPromise(query);
-  const stops = {}
-  response.forEach(el => {
-    let tripId = el.tripId;
-    if (el.tripStatus === 'ts') {
-      stops[tripId - 1] = { ...stops[tripId - 1], enTime: el.deviceTime }
-    } else if (el.tripStatus === 'te') {
-      stops[tripId] = { stopId: tripId, coords: [el.lat, el.lng], stTime: el.deviceTime }
-    }
-  })
-
-  return stops;
+  return response;
 };
 
 /**
