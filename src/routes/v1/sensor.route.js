@@ -1,40 +1,40 @@
 const express = require('express');
 const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
-const objectValidation = require('../../validations/object.validation');
-const objectController = require('../../controllers/object.controller');
+const sensorValidation = require('../../validations/sensor.validation');
+const sensorController = require('../../controllers/sensor.controller');
 
 const router = express.Router();
 
 router
   .route('/')
-  .post(auth('manageObjects'), validate(objectValidation.createObject), objectController.createObject)
-  .get(auth('getObjects'), validate(objectValidation.getObjects), objectController.getObjects);
+  .post(auth('manageSensors'), validate(sensorValidation.createSensor), sensorController.createSensor)
+  .get(auth('getSensors'), validate(sensorValidation.getSensors), sensorController.getSensors);
 
-router.route('/list').get(auth('getObjects'), validate(objectValidation.getObject), objectController.getObjectsList);
+router.route('/list').get(auth('getSensors'), validate(sensorValidation.getSensors), sensorController.getSensorsList);
 
 router
-  .route('/:objectId')
-  .get(auth('getObjects'), validate(objectValidation.getObject), objectController.getObject)
-  .patch(auth('manageObjects'), validate(objectValidation.updateObject), objectController.updateObject)
-  .delete(auth('manageObjects'), validate(objectValidation.deleteObject), objectController.deleteObject);
+  .route('/:sensorId')
+  .get(auth('getSensors'), validate(sensorValidation.getSensor), sensorController.getSensor)
+  .patch(auth('manageSensors'), validate(sensorValidation.updateSensor), sensorController.updateSensor)
+  .delete(auth('manageSensors'), validate(sensorValidation.deleteSensor), sensorController.deleteSensor);
 
 module.exports = router;
 
 /**
  * @swagger
  * tags:
- *   name: Objects
- *   description: Object management and retrieval
+ *   name: Sensors
+ *   description: Sensor management and retrieval
  */
 
 /**
  * @swagger
- * /objects:
+ * /sensors:
  *   post:
- *     summary: Create a object
- *     description: Only admins can create other objects.
- *     tags: [Objects]
+ *     summary: Create a sensor
+ *     description: Only admins can create other sensors.
+ *     tags: [Sensors]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -62,19 +62,19 @@ module.exports = router;
  *                 description: At least one number and one letter
  *               role:
  *                  type: string
- *                  enum: [object, admin]
+ *                  enum: [sensor, admin]
  *             example:
  *               name: fake name
  *               email: fake@example.com
  *               password: password1
- *               role: object
+ *               role: sensor
  *     responses:
  *       "201":
  *         description: Created
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Object'
+ *                $ref: '#/components/schemas/Sensor'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
  *       "401":
@@ -83,9 +83,9 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *
  *   get:
- *     summary: Get all objects
- *     description: Only admins can retrieve all objects.
- *     tags: [Objects]
+ *     summary: Get all sensors
+ *     description: Only admins can retrieve all sensors.
+ *     tags: [Sensors]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -93,12 +93,12 @@ module.exports = router;
  *         name: name
  *         schema:
  *           type: string
- *         description: Object name
+ *         description: Sensor name
  *       - in: query
  *         name: role
  *         schema:
  *           type: string
- *         description: Object role
+ *         description: Sensor role
  *       - in: query
  *         name: sortBy
  *         schema:
@@ -110,7 +110,7 @@ module.exports = router;
  *           type: integer
  *           minimum: 1
  *         default: 10
- *         description: Maximum number of objects
+ *         description: Maximum number of sensors
  *       - in: query
  *         name: page
  *         schema:
@@ -129,7 +129,7 @@ module.exports = router;
  *                 results:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/Object'
+ *                     $ref: '#/components/schemas/Sensor'
  *                 page:
  *                   type: integer
  *                   example: 1
@@ -150,11 +150,11 @@ module.exports = router;
 
 /**
  * @swagger
- * /objects/{id}:
+ * /sensors/{id}:
  *   get:
- *     summary: Get a object
- *     description: Logged in objects can fetch only their own object information. Only admins can fetch other objects.
- *     tags: [Objects]
+ *     summary: Get a sensor
+ *     description: Logged in sensors can fetch only their own sensor information. Only admins can fetch other sensors.
+ *     tags: [Sensors]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -163,14 +163,14 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Object id
+ *         description: Sensor id
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Object'
+ *                $ref: '#/components/schemas/Sensor'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -179,9 +179,9 @@ module.exports = router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   patch:
- *     summary: Update a object
- *     description: Logged in objects can only update their own information. Only admins can update other objects.
- *     tags: [Objects]
+ *     summary: Update a sensor
+ *     description: Logged in sensors can only update their own information. Only admins can update other sensors.
+ *     tags: [Sensors]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -190,7 +190,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Object id
+ *         description: Sensor id
  *     requestBody:
  *       required: true
  *       content:
@@ -219,7 +219,7 @@ module.exports = router;
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Object'
+ *                $ref: '#/components/schemas/Sensor'
  *       "400":
  *         $ref: '#/components/responses/DuplicateEmail'
  *       "401":
@@ -230,9 +230,9 @@ module.exports = router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   delete:
- *     summary: Delete a object
- *     description: Logged in objects can delete only themselves. Only admins can delete other objects.
- *     tags: [Objects]
+ *     summary: Delete a sensor
+ *     description: Logged in sensors can delete only themselves. Only admins can delete other sensors.
+ *     tags: [Sensors]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -241,7 +241,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Object id
+ *         description: Sensor id
  *     responses:
  *       "200":
  *         description: No content

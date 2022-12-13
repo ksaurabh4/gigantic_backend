@@ -37,6 +37,20 @@ const queryObjects = async (filter, options) => {
 };
 
 /**
+ * Query for objects list
+ * @param {Object} filter - Mongo filter
+ * @param {Object} options - Query options
+ * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
+ * @param {number} [options.limit] - Maximum number of results per page (default = 10)
+ * @param {number} [options.page] - Current page (default = 1)
+ * @returns {Promise<QueryResult>}
+ */
+const queryObjectsList = async (filter, options) => {
+  const objects = await ObjectModel.paginate(filter, options, ['objectName', 'objectDeviceImei']);
+  return objects;
+};
+
+/**
  * Get object by id
  * @param {ObjectId} id
  * @returns {Promise<Object>}
@@ -122,6 +136,7 @@ const deleteObjectById = async (objectId) => {
 module.exports = {
   createObject,
   queryObjects,
+  queryObjectsList,
   getObjectById,
   getObjectByImei,
   updateObjectById,

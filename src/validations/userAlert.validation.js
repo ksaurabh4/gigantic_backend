@@ -3,15 +3,13 @@ const { objectId } = require('./custom.validation');
 
 const createUserAlert = {
   body: Joi.object().keys({
-    userAlertId: Joi.string().custom(objectId).required(),
-    userAlertDevices: Joi.array(),
+    userAlerts: Joi.array().required(),
     userAlertUserId: Joi.string().custom(objectId).required(),
-    userAlertText: Joi.string(),
+    userAlertObjectsImei: Joi.array().required(),
     userAlertEnabledOn: Joi.array(),
-    userAlertValue: Joi.string(),
-    userAlertWebhook: Joi.string(),
-    userAlertEmail: Joi.string(),
-    userAlertPhone: Joi.string(),
+    userAlertWebhook: Joi.string().optional().allow(''),
+    userAlertEmail: Joi.string().optional().allow(''),
+    userAlertPhone: Joi.string().optional().allow(''),
   }),
 };
 
@@ -31,13 +29,19 @@ const getUserAlert = {
   }),
 };
 
+const getUsersWithAlerts = {
+  params: Joi.object().keys({
+    deviceImei: Joi.string(),
+  }),
+};
+
 const updateUserAlert = {
   params: Joi.object().keys({
     userAlertId: Joi.required().custom(objectId),
   }),
   body: Joi.object()
     .keys({
-      userAlertDevices: Joi.array(),
+      userAlertObjectsImei: Joi.array(),
       userAlertUserId: Joi.string().custom(objectId),
       userAlertText: Joi.string(),
       userAlertEnabledOn: Joi.array(),
@@ -59,6 +63,7 @@ module.exports = {
   createUserAlert,
   getUserAlerts,
   getUserAlert,
+  getUsersWithAlerts,
   updateUserAlert,
   deleteUserAlert,
 };

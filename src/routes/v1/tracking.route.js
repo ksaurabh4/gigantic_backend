@@ -11,15 +11,39 @@ router
   // .post(auth('manageObjects'), validate(trackingValidation.createObject), trackingController.createObject)
   .get(auth('getTrackingData'), validate(trackingValidation.getDevicesTrackingData), trackingController.getDevicesTrackingData);
 
-  router
+router
+  .route('/notadded')
+  .get(auth('getTrackingData'), validate(trackingValidation.getNotAddedDevicesData), trackingController.getNotAddedDevicesData);
+
+router
   .route('/cmd')
   .post(auth('sendCommand'), validate(trackingValidation.sendCommand), trackingController.sendCommand);
 
 router
+  .route('/history')
+  .get(auth('getTrackingData'), validate(trackingValidation.getDeviceDataByImei), trackingController.getDeviceHistoryData);
+
+router
+  .route('/travelsummary')
+  .get(auth('getTrackingData'), validate(trackingValidation.getDeviceDataByImei), trackingController.getDeviceTravelSummary);
+
+router
+  .route('/trips')
+  .get(auth('getTrackingData'), validate(trackingValidation.getDeviceDataByImei), trackingController.getDeviceTripsData);
+
+router
+  .route('/stops')
+  .get(auth('getTrackingData'), validate(trackingValidation.getDeviceDataByImei), trackingController.getDeviceStopageData);
+
+router
+  .route('/alerts')
+  .get(auth('getTrackingData'), validate(trackingValidation.getDeviceDataByImei), trackingController.getAlertsData);
+
+router
   .route('/:imei')
   .get(auth('getTrackingData'), validate(trackingValidation.getDevicesTrackingData), trackingController.getDeviceTrackingData)
-  // .patch(auth('manageObjects'), validate(trackingValidation.updateObject), trackingController.updateObject)
-  // .delete(auth('manageObjects'), validate(trackingValidation.deleteObject), trackingController.deleteObject);
+// .patch(auth('manageObjects'), validate(trackingValidation.updateObject), trackingController.updateObject)
+// .delete(auth('manageObjects'), validate(trackingValidation.deleteObject), trackingController.deleteObject);
 
 module.exports = router;
 

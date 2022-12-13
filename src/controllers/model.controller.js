@@ -20,6 +20,7 @@ const getModels = catchAsync(async (req, res) => {
 const getModelsList = catchAsync(async (req, res) => {
   const filter = pick(req.query, ['modelPort']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
+  options.populate = 'modelSensors';
   const result = await modelService.queryModelsList(filter, options);
   res.send(result);
 });

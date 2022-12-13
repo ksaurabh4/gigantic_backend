@@ -34,7 +34,7 @@ const queryModels = async (filter, options) => {
  * @returns {Promise<QueryResult>}
  */
 const queryModelsList = async (filter, options) => {
-  const models = await Model.paginate(filter, options, ['modelName', 'modelPort']);
+  const models = await Model.paginate(filter, options, ['modelName', 'modelPort','modelSensors']);
   return models;
 };
 /**

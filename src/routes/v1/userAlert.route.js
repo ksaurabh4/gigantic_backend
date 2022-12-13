@@ -13,6 +13,8 @@ router
 
 router.route('/list').get(auth('getUserAlerts'), validate(userAlertValidation.getUserAlert), userAlertController.getUserAlertsList);
 
+router.route('/device/:deviceImei').get(auth('getUserAlerts'), validate(userAlertValidation.getUsersWithAlerts), userAlertController.getUsersWithAlerts);
+
 router
   .route('/:userAlertId')
   .get(auth('getUserAlerts'), validate(userAlertValidation.getUserAlert), userAlertController.getUserAlert)

@@ -4,6 +4,7 @@ const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 const { trackingService } = require('../services');
+const { timeZoneToMinutes } = require('../utils/helper');
 
 const getDevicesTrackingData = catchAsync(async (req, res) => {
   const filter = pick(req.query, ['protocol', 'vehicleStatus']);
@@ -11,6 +12,17 @@ const getDevicesTrackingData = catchAsync(async (req, res) => {
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
   try {
     const result = await trackingService.queryDevicesTrackingData(filter, options);
+    res.send(result);
+  } catch (error) {
+    console.log('error', error);
+  }
+});
+
+const getNotAddedDevicesData = catchAsync(async (req, res) => {
+  const filter = pick(req.query, ['protocol']);
+  const options = pick(req.query, ['sortBy', 'limit', 'page']);
+  try {
+    const result = await trackingService.queryNotAddedDevicesData(filter, options);
     res.send(result);
   } catch (error) {
     console.log('error', error);
@@ -26,11 +38,50 @@ const getDeviceTrackingData = catchAsync(async (req, res) => {
 });
 
 const getDeviceHistoryData = catchAsync(async (req, res) => {
-  const historyData = await trackingService.queryDeviceHistoryDataByImei(req.params.imei);
-  if (!historyData[0]) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Device not found');
-  }
-  res.send(trackingData[0]);
+  const timeDifference = timeZoneToMinutes(req.user.userTimeZone);
+  const historyData = await trackingService.queryDeviceHistoryDataByImei({ ...req.query, to: moment(req.query.to).subtract(timeDifference, "minute").format('YYYY-MM-DD HH:mm'), from: moment(req.query.from).subtract(timeDifference, "minute").format('YYYY-MM-DD HH:mm'), tz: req.user.userTimeZone });
+  // if (!historyData[0]) {
+  //   throw new ApiError(httpStatus.NOT_FOUND, 'Device not found');
+  // }
+  res.send(historyData);
+});
+
+const getDeviceTripsData = catchAsync(async (req, res) => {
+  const timeDifference = timeZoneToMinutes(req.user.userTimeZone);
+  const historyData = await trackingService.queryDeviceTripsByImei({ ...req.query, to: moment(req.query.to).subtract(timeDifference, "minute").format('YYYY-MM-DD HH:mm'), from: moment(req.query.from).subtract(timeDifference, "minute").format('YYYY-MM-DD HH:mm'), tz: req.user.userTimeZone });
+  // if (!historyData[0]) {
+  //   throw new ApiError(httpStatus.NOT_FOUND, 'Device not found');
+  // }
+  res.send(historyData);
+});
+
+const getDeviceStopageData = catchAsync(async (req, res) => {
+  const timeDifference = timeZoneToMinutes(req.user.userTimeZone);
+  const historyData = await trackingService.queryDeviceStopageByImei({ ...req.query, to: moment(req.query.to).subtract(timeDifference, "minute").format('YYYY-MM-DD HH:mm'), from: moment(req.query.from).subtract(timeDifference, "minute").format('YYYY-MM-DD HH:mm'), tz: req.user.userTimeZone });
+  // if (!historyData[0]) {
+  //   throw new ApiError(httpStatus.NOT_FOUND, 'Device not found');
+  // }
+  res.send(historyData);
+});
+
+const getAlertsData = catchAsync(async (req, res) => {
+  const timeDifference = timeZoneToMinutes(req.user.userTimeZone);
+  const alertsData = await trackingService.queryAlertsByImei({ ...req.query, to: moment(req.query.to).subtract(timeDifference, "minute").format('YYYY-MM-DD HH:mm'), from: moment(req.query.from).subtract(timeDifference, "minute").format('YYYY-MM-DD HH:mm'), tz: req.user.userTimeZone, userId:req.user.id });
+  // if (!historyData[0]) {
+  //   throw new ApiError(httpStatus.NOT_FOUND, 'Device not found');
+  // }
+  res.send(alertsData);
+});
+
+const getDeviceTravelSummary = catchAsync(async (req, res) => {
+
+  const timeDifference = timeZoneToMinutes(req.user.userTimeZone);
+  console.log(req.user.userTimeZone, timeDifference);
+  const travelSummaryData = await trackingService.queryDeviceTravelSummaryByImei({ ...req.query, to: moment(req.query.to).subtract(timeDifference, "minute").format('YYYY-MM-DD HH:mm'), from: moment(req.query.from).subtract(timeDifference, "minute").format('YYYY-MM-DD HH:mm'), tz: req.user.userTimeZone });
+  // if (!historyData[0]) {
+  //   throw new ApiError(httpStatus.NOT_FOUND, 'Device not found');
+  // }
+  res.send(travelSummaryData);
 });
 
 const saveLockData = (
@@ -218,9 +269,9 @@ const sendCommand = catchAsync(async (req, res) => {
     //         .send({ message: response, isSuccess, cutoffStatus });
     //     });
     // } else {
-      return res
-        .status(200)
-        .send({ message: response, isSuccess, cutoffStatus });
+    return res
+      .status(200)
+      .send({ message: response, isSuccess, cutoffStatus });
     // }
   });
 
@@ -231,7 +282,12 @@ const sendCommand = catchAsync(async (req, res) => {
 
 module.exports = {
   getDevicesTrackingData,
+  getNotAddedDevicesData,
   getDeviceTrackingData,
   getDeviceHistoryData,
+  getDeviceTripsData,
+  getDeviceStopageData,
+  getAlertsData,
+  getDeviceTravelSummary,
   sendCommand,
 };

@@ -9,13 +9,26 @@ const ApiError = require('../utils/ApiError');
  * @param {Object} userAlertBody
  * @returns {Promise<UserAlert>}
  */
-const createUserAlert = async (userAlertBody) => {
-  if (await UserAlert.isUserAlertAdded(userAlertBody.userAlertImei)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'userAlert already added');
+const createUserAlert = (userAlertBody) => {
+  // if (await UserAlert.isUserAlertAdded(userAlertBody.userAlertImei)) {
+  //   throw new ApiError(httpStatus.BAD_REQUEST, 'userAlert already added');
+  // }
+  const { userAlerts, userAlertUserId, ...remainingUserAlertBody } = userAlertBody;
+  // const userAlertObj =  {};
+  // userAlerts.forEach(alert=>{
+  //   userAlertObj[alert.alertId] = alert
+  //   delete userAlertObj[alert.alertId].alertId
+  // })
+
+  userAlerts.forEach(async (alert)=> {
+    const { alertId, alertValue, alertText } = alert;
+    if (await UserAlert.isAlertAddedForThisUserForThisValue(userAlertUserId,alertId, alertValue)) {
+    // throw new ApiError(httpStatus.BAD_REQUEST, 'This alert already added for this user');
+  }else{
+      UserAlert.create({ userAlertId: alertId, userAlertValue: alertValue, userAlertText: alertText, userAlertUserId, ...remainingUserAlertBody });
   }
-  const userAlerts = UserAlert.create(userAlertBody);
-  axios.post('http://localhost:3001/api/refresh');
-  return userAlerts;
+  })
+  return { message: 'Alerts added successfully!' };
 };
 
 /**
@@ -45,6 +58,50 @@ const queryUserAlertsList = async (filter, options) => {
   const userAlerts = await UserAlert.paginate(filter, options, ['userAlertImei', 'userAlertSimNumber']);
   return userAlerts;
 };
+
+/**
+ * Get userAlert by imei
+ * @param {ObjectId} id
+ * @returns {Promise<UserAlert>}
+ */
+const getUsersWithAlertsByImei = async (filter) => {
+  const alerts = await UserAlert.aggregate([
+    {
+      $match: filter
+    },
+    // {
+    //   $group: { _id: "$userAlertId", userIds: { $push: "$userAlertUserId" }, alertValues: { $push: "$userAlertValue" }, alertTexts: { $push: "$userAlertText" } }
+    // },
+    
+    {
+      $lookup: {
+        from: "alerts",
+        localField: "userAlertId",
+        foreignField: "_id",
+        as: "alert"
+      }
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "userAlertUserId",
+        foreignField: "_id",
+        as: "alertUser"
+      }
+    },
+    {
+      $project: {
+        alert: 1,
+        alertUser: 1,
+        userAlertValue: 1,
+        userAlertText: 1,
+        _id: 0
+      }
+    },
+  ])
+  return alerts;
+};
+
 /**
  * Get userAlert by id
  * @param {ObjectId} id
@@ -95,6 +152,7 @@ module.exports = {
   queryUserAlerts,
   queryUserAlertsList,
   getUserAlertById,
+  getUsersWithAlertsByImei,
   updateUserAlertById,
   deleteUserAlertById,
 };

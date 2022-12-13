@@ -11,19 +11,22 @@ const createUserAlert = catchAsync(async (req, res) => {
 });
 
 const getUserAlerts = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['userAlertStatus', 'userAlertModelId']);
-  if(req.user.role !== 'superadmin'){
-    filter.userAlertClientId = req.user.userCompId;
-  }
+  const filter = pick(req.query, ['userAlertStatus', 'userAlertUserId']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
-  options.populate = 'userAlertSensors.sensorId, userAlertModelId, userAlertClientId';
+  options.populate = 'userAlertId';
   const result = await userAlertService.queryUserAlerts(filter, options);
   res.send(result);
 });
 
+const getUsersWithAlerts = catchAsync(async (req, res) =>{
+  const filter = {};
+  filter.userAlertObjectsImei = { $in: [req.params.deviceImei] };
+  const result = await userAlertService.getUsersWithAlertsByImei(filter);
+  res.send(result);
+})
+
 const getUserAlertsList = catchAsync(async (req, res) => {
   const filter = pick(req.query, ['userAlertClientId', 'userAlertStatus']);
-  // filter.compParentId = req.user.userCompId;
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
   const result = await userAlertService.queryUserAlertsList(filter, options);
   res.send(result);
@@ -55,6 +58,7 @@ module.exports = {
   createUserAlert,
   getUserAlerts,
   getUserAlertsList,
+  getUsersWithAlerts,
   getUserAlert,
   updateUserAlert,
   deleteUserAlert,

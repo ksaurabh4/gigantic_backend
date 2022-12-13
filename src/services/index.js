@@ -6,6 +6,7 @@ module.exports.clientService = require('./client.service');
 module.exports.deviceService = require('./device.service');
 module.exports.objectService = require('./object.service');
 module.exports.modelService = require('./model.service');
+module.exports.sensorService = require('./sensor.service');
 module.exports.alertService = require('./alert.service');
 module.exports.userAlertService = require('./userAlert.service');
 module.exports.trackingService = require('./tracking.service');

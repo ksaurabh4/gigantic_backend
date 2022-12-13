@@ -20,6 +20,7 @@ const getObjects = {
     objectName: Joi.string(),
     objectType: Joi.string(),
     objectClientId: Joi.string().custom(objectId),
+    objectUsers: Joi.string().custom(objectId),
     objectDeviceId: Joi.string().custom(objectId),
     objectDeviceImei: Joi.string(),
     objectIsInParkingMode: Joi.boolean(),

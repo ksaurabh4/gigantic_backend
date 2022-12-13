@@ -29,10 +29,16 @@ const toJSON = (schema) => {
       });
 
       ret.id = ret._id?.toString();
+      if (ret.userPasswordText){
+        delete ret.userPasswordText;
+      }
       delete ret._id;
       delete ret.__v;
+
       delete ret.createdAt;
       delete ret.updatedAt;
+      delete ret.lastUpdatedAt;
+      delete ret.lastUpdatedBy;
       if (transform) {
         return transform(doc, ret, options);
       }
